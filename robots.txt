@@ -1,0 +1,11 @@
+# robots.txt — Portfolio Oussama Khiati
+# Autorise tous les moteurs de recherche à indexer le site
+
+User-agent: *
+Allow: /
+
+# Interdit l'indexation de la page admin
+Disallow: /admin.html
+
+# Sitemap
+Sitemap: https://oussama-khiati.com/sitemap.xml

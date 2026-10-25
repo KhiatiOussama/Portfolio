@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin — Portfolio Oussama Khiati</title>
+    <link rel="shortcut icon" href="favicon-32x32.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        .input-base {
+            width: 100%;
+            padding: 0.6rem 0.9rem;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-base:focus {
+            border-color: #8b5cf6;
+        }
+
+        .label-base {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 0.35rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tab-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #cbd5e1;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            border: none;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-btn.active {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .drop-zone {
+            border: 2px dashed #475569;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .drop-zone:hover,
+        .drop-zone.drag-over {
+            border-color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .drop-zone img {
+            max-height: 100px;
+            margin: 0 auto 0.5rem;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body class="bg-[#0a0a0f] text-slate-200 min-h-screen p-6">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-8 flex items-center justify-between flex-wrap gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-white">
+                    ⚙️ Panneau d'administration
+                </h1>
+                <p class="text-slate-400 text-sm mt-1">
+                    Modifie ton portfolio sans toucher au code
+                </p>
+            </div>
+            <div class="flex gap-3">
+                <button id="btn-preview"
+                    class="px-5 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 font-semibold transition">
+                    👁️ Aperçu
+                </button>
+                <button id="btn-export"
+                    class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-semibold hover:scale-105 transition">
+                    📥 Exporter config.js
+                </button>
+            </div>
+        </header>
+
+        <div id="size-warning"
+            class="hidden mb-6 p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/30 text-yellow-200 text-sm">
+            ⚠️ Ton fichier commence à être lourd (<span id="size-value">0</span> Ko)
+            à cause des images en base64.
+        </div>
+
+        <nav class="flex gap-2 mb-6 overflow-x-auto pb-2" role="tablist">
+            <button class="tab-btn active" data-tab="identite">👤 Identité</button>
+            <button class="tab-btn" data-tab="contact">📞 Contact</button>
+            <button class="tab-btn" data-tab="bio">📝 Bio</button>
+            <button class="tab-btn" data-tab="stats">📊 Stats</button>
+            <button class="tab-btn" data-tab="competences">🛠️ Compétences</button>
+            <button class="tab-btn" data-tab="experiences">💼 Parcours</button>
+            <button class="tab-btn" data-tab="projets">🚀 Projets</button>
+            <button class="tab-btn" data-tab="temoignages">⭐ Avis</button>
+        </nav>
+
+        <div class="bg-white/[0.03] border border-white/10 rounded-2xl p-6">
+            <section id="tab-identite" class="tab-content">
+                <h2 class="text-xl font-bold mb-4">Identité</h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="label-base">Nom complet</label><input class="input-base" data-key="nom"
+                            data-type="string" />
+                    </div>
+                    <div>
+                        <label class="label-base">Prénom</label><input class="input-base" data-key="prenom"
+                            data-type="string" />
+                    </div>
+                    <div>
+                        <label class="label-base">Titre</label><input class="input-base" data-key="titre"
+                            data-type="string" />
+                    </div>
+                    <div>
+                        <label class="label-base">Ville</label><input class="input-base" data-key="ville"
+                            data-type="string" />
+                    </div>
+                    <div>
+                        <label class="label-base">Pays</label><input class="input-base" data-key="pays"
+                            data-type="string" />
+                    </div>
+                    <div>
+                        <label class="label-base">CV (nom fichier)</label><input class="input-base" data-key="cv"
+                            data-type="string" />
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-contact" class="tab-content hidden">
+                <h2 class="text-xl font-bold mb-4">Contact</h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="label-base">Email</label><input class="input-base" data-key="email"
+                            data-type="string" />
+                    </div>
+                    <div>
+                        <label class="label-base">WhatsApp</label><input class="input-base" data-key="whatsapp"
+                            data-type="string" placeholder="212655229538" />
+                    </div>
+                    <div>
+                        <label class="label-base">LinkedIn (slug)</label><input class="input-base" data-key="linkedin"
+                            data-type="string" />
+                    </div>
+                    <div>
+                        <label class="label-base">GitHub</label><input class="input-base" data-key="github"
+                            data-type="string" />
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-bio" class="tab-content hidden">
+                <h2 class="text-xl font-bold mb-4">Bio</h2>
+                <textarea class="input-base" rows="6" data-key="bio" data-type="array-string"></textarea>
+                <p class="text-xs text-slate-500 mt-2">Un paragraphe par ligne.</p>
+                <h2 class="text-xl font-bold mt-6 mb-4">Mots animés (typing)</h2>
+                <textarea class="input-base" rows="4" data-key="motsAnimes" data-type="array-string"></textarea>
+            </section>
+
+            <section id="tab-stats" class="tab-content hidden">
+                <h2 class="text-xl font-bold mb-4">Statistiques</h2>
+                <div id="stats-container" class="space-y-3"></div>
+                <button onclick="addStat()"
+                    class="mt-3 px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 font-semibold">
+                    + Ajouter une stat
+                </button>
+            </section>
+
+            <section id="tab-competences" class="tab-content hidden">
+                <h2 class="text-xl font-bold mb-4">Compétences</h2>
+                <div id="competences-container" class="space-y-4"></div>
+                <button onclick="addCompetence()"
+                    class="mt-3 px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 font-semibold">
+                    + Ajouter une catégorie
+                </button>
+            </section>
+
+            <section id="tab-experiences" class="tab-content hidden">
+                <h2 class="text-xl font-bold mb-4">Expériences</h2>
+                <div id="experiences-container" class="space-y-4"></div>
+                <button onclick="addExperience()"
+                    class="mt-3 px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 font-semibold">
+                    + Ajouter une expérience
+                </button>
+            </section>
+
+            <section id="tab-projets" class="tab-content hidden">
+                <h2 class="text-xl font-bold mb-4">Projets</h2>
+                <p class="text-sm text-slate-500 mb-4">
+                    💡 Tu peux garder un emoji, uploader une image, ou coller une URL.
+                </p>
+                <div id="projets-container" class="space-y-4"></div>
+                <button onclick="addProjet()"
+                    class="mt-3 px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 font-semibold">
+                    + Ajouter un projet
+                </button>
+            </section>
+            <!-- ⭐ TÉMOIGNAGES / AVIS -->
+            <!-- ⭐ TÉMOIGNAGES / AVIS -->
+            <section id="tab-temoignages" class="tab-content hidden">
+                <div class="flex items-start justify-between flex-wrap gap-3 mb-4">
+                    <div>
+                        <h2 class="text-xl font-bold">Témoignages / Avis</h2>
+                        <p class="text-sm text-slate-500">Recommandations de personnes avec qui tu as collaboré.</p>
+                    </div>
+                    <button onclick="showRequestTemplate()"
+                        class="px-3 py-2 bg-cyan-500/20 text-cyan-400 rounded-lg hover:bg-cyan-500/30 font-semibold text-sm">
+                        📋 Modèle de demande
+                    </button>
+                </div>
+                <div id="temoignages-container" class="space-y-4"></div>
+                <button onclick="addTemoignage()"
+                    class="mt-3 px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 font-semibold">
+                    + Ajouter un avis
+                </button>
+            </section>
+        </div>
+
+        <div class="fixed bottom-6 right-6 z-50">
+            <button id="btn-save"
+                class="px-6 py-3 rounded-full bg-green-500 hover:bg-green-400 text-white font-bold shadow-lg hover:scale-105 transition">
+                💾 Sauvegarder
+            </button>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="admin.js"></script>
+</body>
+
+</html>
