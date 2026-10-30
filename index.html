@@ -10,7 +10,7 @@
   <meta name="author" content="Oussama Khiati">
   <meta name="keywords" content="développeur full stack, React, Laravel, PHP, MySQL, Casablanca, Maroc, freelance, portfolio">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#8b5cf6">
+  <meta name="theme-color" content="#092635">
   
   <!-- ============ CANONICAL ============ -->
   <link rel="canonical" href="https://oussama-khiati.com/">
@@ -23,6 +23,7 @@
   <meta property="og:image" content="https://oussama-khiati.com/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Portfolio d'Oussama Khiati, développeur Full Stack">
   <meta property="og:locale" content="fr_FR">
   <meta property="og:site_name" content="Oussama Khiati">
   
@@ -63,405 +64,173 @@
   }
   </script>
 
-  <!-- ============ TAILWIND CDN ============ -->
+  <!-- ============ TAILWIND COMPILÉ ============ -->
   <link rel="stylesheet" href="tailwind.min.css">
-  
-</script>
-  <!-- ============ GOOGLE FONTS ============ -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&family=Tajawal:wght@400;500;700&display=swap">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-</noscript>
- 
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
   <!-- ============ CSS PERSONNALISÉ ============ -->
   <link rel="stylesheet" href="style.css">
-  <link rel="shortcut icon" href="favicon-32x32.png" type="image/x-icon">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" sizes="any">
   
 </head>
 
-<body class="bg-white dark:bg-[#0a0a0f] text-slate-900 dark:text-slate-200 overflow-x-hidden selection:bg-accent/30 selection:text-white font-sans antialiased transition-colors duration-300">
-
-  <!-- Skip link accessibilité -->
+<body class="developer-portfolio font-sans antialiased">
   <a href="#main-content" class="skip-link">Aller au contenu principal</a>
 
-  <!-- Curseur lumineux -->
-  <div class="cursor-glow" id="cursor-glow" aria-hidden="true"></div>
-
-  <!-- ============================================================
-       HEADER / NAVBAR
-       ============================================================ -->
-  <header id="navbar" class="fixed top-0 inset-x-0 z-50 transition-all duration-300" role="banner">
-    <nav class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between" aria-label="Navigation principale">
-      
-      <!-- Logo -->
-      <a href="#home" class="flex items-center gap-2 font-display font-bold text-xl">
-        <span class="text-accent" aria-hidden="true">&lt;/&gt;</span>
-        <span>OK<span class="text-accent">.</span></span>
-      </a>
-
-      <!-- Liens desktop -->
-      <ul class="hidden lg:flex items-center gap-6 text-sm font-medium" role="list">
-        <li><a href="#about" class="hover:text-accent transition" data-i18n="nav_about">À propos</a></li>
-        <li><a href="#skills" class="hover:text-accent transition" data-i18n="nav_skills">Compétences</a></li>
-        <li><a href="#experience" class="hover:text-accent transition" data-i18n="nav_experience">Parcours</a></li>
-        <li><a href="#projects" class="hover:text-accent transition" data-i18n="nav_projects">Projets</a></li>
-        <li><a href="#temoignages" class="hover:text-accent transition" data-i18n="nav_testimonials">Avis</a></li>
-        <li><a href="etudes-de-cas.html" class="hover:text-accent transition" data-i18n="nav_cases">Études de cas</a></li>
-        <li><a href="blog.html" class="hover:text-accent transition" data-i18n="nav_blog">Blog</a></li>
-        <li><a href="#contact" class="hover:text-accent transition" data-i18n="nav_contact">Contact</a></li>
+  <header id="navbar" role="banner">
+    <nav class="site-nav shell" aria-label="Navigation principale">
+      <a href="#home" class="brand" aria-label="Oussama Khiati — Accueil"><span data-fa-icon="code" aria-hidden="true"></span><span>oussama<span class="brand-dot">.dev</span></span></a>
+      <ul class="desktop-links" role="list">
+        <li><a href="#about" data-i18n="nav_about">À propos</a></li>
+        <li><a href="#skills" data-i18n="nav_skills">Compétences</a></li>
+        <li><a href="#experience" data-i18n="nav_experience">Expérience</a></li>
+        <li><a href="#formation" data-i18n="nav_formation">Formation</a></li>
+        <li><a href="#projects" data-i18n="nav_projects">Projets</a></li>
       </ul>
-
-      <!-- Actions -->
-      <div class="flex items-center gap-3">
-        
-        <!-- Langue -->
-        <div class="relative" id="lang-selector">
-          <button id="lang-btn" 
-                  class="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 transition-all text-sm font-semibold"
-                  aria-label="Changer de langue" 
-                  aria-expanded="false" 
-                  aria-haspopup="true">
-            <span id="lang-flag">🇫🇷</span>
-            <span id="lang-code" class="hidden sm:inline">FR</span>
-            <span class="text-xs opacity-60" aria-hidden="true">▾</span>
+      <div class="nav-actions">
+        <div id="lang-selector" class="language-select">
+          <button id="lang-btn" type="button" aria-label="Changer de langue" aria-expanded="false" aria-haspopup="true" aria-controls="lang-dropdown">
+            <span id="lang-flag"><img src="assets/tech-icons/flag-fr.svg" alt="" width="20" height="15"></span>
+            <span id="lang-code">FR</span><span data-fa-icon="chevron-down" aria-hidden="true"></span>
           </button>
-          <div id="lang-dropdown"
-               class="absolute right-0 top-full mt-2 w-40 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-white/10 hidden overflow-hidden z-50"
-               role="menu">
-            <button data-lang="fr" class="lang-option w-full flex items-center gap-3 px-4 py-3 hover:bg-accent/10 transition text-left" role="menuitem">
-              <span class="text-xl" aria-hidden="true">🇫🇷</span><span class="font-medium">Français</span>
-            </button>
-            <button data-lang="en" class="lang-option w-full flex items-center gap-3 px-4 py-3 hover:bg-accent/10 transition text-left" role="menuitem">
-              <span class="text-xl" aria-hidden="true">🇬🇧</span><span class="font-medium">English</span>
-            </button>
-            <button data-lang="ar" class="lang-option w-full flex items-center gap-3 px-4 py-3 hover:bg-accent/10 transition text-left" role="menuitem">
-              <span class="text-xl" aria-hidden="true">🇲🇦</span><span class="font-medium">العربية</span>
-            </button>
+          <div id="lang-dropdown" class="language-dropdown hidden" role="menu">
+            <button data-lang="fr" class="lang-option" role="menuitem"><img src="assets/tech-icons/flag-fr.svg" alt="" width="22" height="16"><span>Français</span></button>
+            <button data-lang="en" class="lang-option" role="menuitem"><img src="assets/tech-icons/flag-gb.svg" alt="" width="22" height="16"><span>English</span></button>
+            <button data-lang="ar" class="lang-option" role="menuitem"><img src="assets/tech-icons/flag-ma.svg" alt="" width="22" height="16"><span>العربية</span></button>
           </div>
         </div>
-
-        <!-- Thème -->
-        <button id="theme-toggle" 
-                class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 flex items-center justify-center text-lg transition-all" 
-                aria-label="Changer de thème">
-          <span id="theme-icon">🌙</span>
-        </button>
-
-        <!-- WhatsApp -->
-        <a id="nav-whatsapp" 
-           href="#" 
-           target="_blank" 
-           rel="noopener noreferrer"
-           class="hidden md:inline-flex items-center gap-2 bg-whatsapp hover:bg-[#1ebe5a] text-white text-sm font-semibold px-4 py-2.5 rounded-lg transition-all">
-          <span aria-hidden="true">💬</span> WhatsApp
-        </a>
-
-        <!-- Burger mobile -->
-        <button id="burger" 
-                class="lg:hidden flex flex-col gap-1.5 p-2" 
-                aria-label="Ouvrir le menu" 
-                aria-expanded="false" 
-                aria-controls="mobile-menu">
-          <span class="w-6 h-0.5 bg-slate-900 dark:bg-white" aria-hidden="true"></span>
-          <span class="w-6 h-0.5 bg-slate-900 dark:bg-white" aria-hidden="true"></span>
-          <span class="w-6 h-0.5 bg-slate-900 dark:bg-white" aria-hidden="true"></span>
-        </button>
+        <button id="theme-toggle" type="button" class="icon-button" aria-label="Changer de thème"><span id="theme-icon" aria-hidden="true"></span></button>
+        <a id="nav-whatsapp" href="#" target="_blank" rel="noopener noreferrer" class="button button-small nav-contact"><span data-i18n="nav_cta">Parlons projet</span><span data-fa-icon="arrow-up-right-from-square" aria-hidden="true"></span></a>
+        <button id="burger" type="button" class="icon-button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-menu"><span data-fa-icon="bars" aria-hidden="true"></span></button>
       </div>
     </nav>
-
-    <!-- Menu mobile -->
-    <div id="mobile-menu" 
-         class="lg:hidden fixed inset-0 bg-white dark:bg-[#0a0a0f] backdrop-blur-xl translate-x-full transition-transform duration-300 z-40" 
-         role="dialog" 
-         aria-modal="true" 
-         aria-label="Menu mobile">
-      <nav class="flex flex-col items-center justify-center h-full gap-6 text-xl font-display" aria-label="Navigation mobile">
-        <a href="#about" class="mobile-link hover:text-accent transition" data-i18n="nav_about">À propos</a>
-        <a href="#skills" class="mobile-link hover:text-accent transition" data-i18n="nav_skills">Compétences</a>
-        <a href="#experience" class="mobile-link hover:text-accent transition" data-i18n="nav_experience">Parcours</a>
-        <a href="#projects" class="mobile-link hover:text-accent transition" data-i18n="nav_projects">Projets</a>
-        <a href="#temoignages" class="mobile-link hover:text-accent transition" data-i18n="nav_testimonials">Avis</a>
-        <a href="etudes-de-cas.html" class="mobile-link hover:text-accent transition" data-i18n="nav_cases">Études de cas</a>
-        <a href="blog.html" class="mobile-link hover:text-accent transition" data-i18n="nav_blog">Blog</a>
-        <a href="#contact" class="mobile-link hover:text-accent transition" data-i18n="nav_contact">Contact</a>
-        <a id="mobile-whatsapp" href="#" target="_blank" rel="noopener noreferrer" 
-           class="mt-4 inline-flex items-center gap-2 bg-whatsapp text-white text-lg font-semibold px-6 py-3 rounded-lg">
-          <span aria-hidden="true">💬</span> WhatsApp
-        </a>
-      </nav>
-    </div>
   </header>
 
-  <!-- ============================================================
-       MAIN
-       ============================================================ -->
+  <div id="mobile-menu" class="mobile-menu translate-x-full" role="dialog" aria-modal="true" aria-label="Menu mobile" aria-hidden="true" inert>
+    <div class="mobile-menu-top"><span class="mono">// navigation</span><button id="mobile-menu-close" type="button" class="icon-button" aria-label="Fermer le menu"><span data-fa-icon="xmark" aria-hidden="true"></span></button></div>
+    <nav aria-label="Navigation mobile">
+      <a href="#about" class="mobile-link"><span data-fa-icon="user" aria-hidden="true"></span><span data-i18n="nav_about">À propos</span><small>01</small></a>
+      <a href="#skills" class="mobile-link"><span data-fa-icon="layer-group" aria-hidden="true"></span><span data-i18n="nav_skills">Compétences</span><small>02</small></a>
+      <a href="#experience" class="mobile-link"><span data-fa-icon="briefcase" aria-hidden="true"></span><span data-i18n="nav_experience">Expérience</span><small>03</small></a>
+      <a href="#formation" class="mobile-link"><span data-fa-icon="book-open" aria-hidden="true"></span><span data-i18n="nav_formation">Formation</span><small>04</small></a>
+      <a href="#projects" class="mobile-link"><span data-fa-icon="folder-open" aria-hidden="true"></span><span data-i18n="nav_projects">Projets</span><small>05</small></a>
+      <a href="#temoignages" class="mobile-link"><span data-fa-icon="star" aria-hidden="true"></span><span data-i18n="nav_testimonials">Avis</span><small>06</small></a>
+      <a href="#contact" class="mobile-link"><span data-fa-icon="envelope" aria-hidden="true"></span><span data-i18n="nav_contact">Contact</span><small>07</small></a>
+      <a id="mobile-whatsapp" href="#" target="_blank" rel="noopener noreferrer" class="button"><span data-fa-icon="whatsapp" aria-hidden="true"></span><span data-i18n="hero_cta_whatsapp">Discuter sur WhatsApp</span></a>
+    </nav>
+  </div>
+
   <main id="main-content">
-
-    <!-- ============ HERO ============ -->
-    <section id="home" class="relative min-h-screen flex items-center justify-center px-6 pt-32 pb-20" aria-labelledby="hero-title">
-      
-      <!-- Blobs décoratifs -->
-<div class="blob absolute top-1/4 left-1/4 w-72 h-72 bg-accent/20 rounded-full blur-3xl animate-pulse" aria-hidden="true"></div>
-<div class="blob absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan/10 rounded-full blur-3xl animate-pulse" aria-hidden="true"></div>
-      
-<div class="relative max-w-5xl mx-auto text-center z-10">
-        
-        <!-- Badge dispo -->
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 mb-8 rounded-full border border-accent/30 bg-accent/5 text-sm font-medium">
-          <span class="relative flex h-2.5 w-2.5" aria-hidden="true">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-400"></span>
-          </span>
-          <span data-i18n="hero_available">Disponible pour missions freelance</span>
-        </div>
-
-        <!-- Titre -->
-        <h1 id="hero-title" class="font-display font-bold text-5xl md:text-7xl lg:text-8xl leading-[1.05] mb-6">
-          <span data-i18n="hero_greeting">Salut, je suis</span><br>
-          <span id="hero-nom" class="gradient-text">Oussama Khiati</span>
-        </h1>
-
-        <!-- Typing -->
-        <p class="font-display text-xl md:text-2xl text-slate-600 dark:text-slate-400 font-medium mb-6 h-10 md:h-12" aria-live="polite">
-          <span id="typing"></span><span class="text-accent animate-pulse" aria-hidden="true">|</span>
-        </p>
-
-        <!-- Bio -->
-        <p class="max-w-2xl mx-auto text-slate-600 dark:text-slate-400 text-base md:text-lg leading-relaxed mb-10" data-i18n="hero_bio">
-          Technicien Spécialisé en Développement Digital (Full Stack). Je conçois des applications web modernes et performantes avec React.js, Laravel, PHP et MySQL.
-        </p>
-
-        <!-- CTA -->
-        <div class="flex flex-wrap items-center justify-center gap-4 mb-12">
-          <a href="#projects" class="group inline-flex items-center gap-2 bg-gradient-to-r from-accent to-cyan text-white font-semibold px-7 py-3.5 rounded-xl transition-all hover:scale-105">
-            <span data-i18n="hero_cta_projects">Voir mes projets</span>
-            <span class="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
-          </a>
-          <a id="hero-whatsapp" href="#" target="_blank" rel="noopener noreferrer" 
-             class="inline-flex items-center gap-2 border border-slate-300 dark:border-white/20 hover:border-whatsapp hover:bg-whatsapp/10 font-semibold px-7 py-3.5 rounded-xl transition-all">
-            <span aria-hidden="true">💬</span> <span data-i18n="hero_cta_whatsapp">Discuter sur WhatsApp</span>
-          </a>
-          <a id="hero-cv" href="#" download 
-             class="group inline-flex items-center gap-2 bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/20 hover:bg-slate-200 dark:hover:bg-white/10 font-semibold px-7 py-3.5 rounded-xl transition-all hover:scale-105">
-            <span aria-hidden="true">📄</span>
-            <span data-i18n="hero_cta_cv">Télécharger mon CV</span>
-            <span class="group-hover:translate-y-0.5 transition-transform" aria-hidden="true">⬇</span>
-          </a>
-        </div>
-
-        <!-- Stats -->
-        <dl id="hero-stats" class="grid grid-cols-3 gap-4 md:gap-8 max-w-2xl mx-auto pt-8 border-t border-slate-200 dark:border-white/10"></dl>
-      </div>
-    </section>
-
-    <!-- ============ MARQUEE TECH ============ -->
-    <section class="py-8 border-y border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/[0.02] overflow-hidden" aria-label="Technologies maîtrisées">
-      <div class="flex animate-marquee whitespace-nowrap gap-4" id="marquee"></div>
-    </section>
-
-    <!-- ============ À PROPOS ============ -->
-    <section id="about" class="relative py-24 px-6" aria-labelledby="about-title">
-      <div class="max-w-6xl mx-auto">
-        <header class="mb-16 reveal">
-          <p class="text-accent font-semibold text-sm uppercase tracking-widest">
-            <span aria-hidden="true">01 —</span> <span data-i18n="about_label">À propos</span>
-          </p>
-          <h2 id="about-title" class="font-display font-bold text-4xl md:text-5xl mt-3" data-i18n="about_title">Qui suis-je ?</h2>
-        </header>
-
-        <div class="grid md:grid-cols-2 gap-12 items-start">
-          
-          <!-- Bio -->
-          <div id="about-bio" class="space-y-5 text-slate-600 dark:text-slate-400 leading-relaxed reveal"></div>
-
-          <!-- Cartes expertise -->
-          <div class="grid gap-4 reveal">
-            <article class="p-6 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10">
-              <div class="flex items-start gap-4">
-                <div class="text-3xl" aria-hidden="true">⚛️</div>
-                <div>
-                  <h3 class="font-display font-semibold text-slate-900 dark:text-white mb-1" data-i18n="about_frontend">Front-End Developer</h3>
-                  <p class="text-sm text-slate-500" data-i18n="about_frontend_desc">Interfaces modernes avec React.js.</p>
-                </div>
-              </div>
-            </article>
-            <article class="p-6 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10">
-              <div class="flex items-start gap-4">
-                <div class="text-3xl" aria-hidden="true">⚙️</div>
-                <div>
-                  <h3 class="font-display font-semibold text-slate-900 dark:text-white mb-1" data-i18n="about_backend">Back-End Developer</h3>
-                  <p class="text-sm text-slate-500" data-i18n="about_backend_desc">APIs avec Laravel et PHP.</p>
-                </div>
-              </div>
-            </article>
-            <article class="p-6 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10">
-              <div class="flex items-start gap-4">
-                <div class="text-3xl" aria-hidden="true">📐</div>
-                <div>
-                  <h3 class="font-display font-semibold text-slate-900 dark:text-white mb-1" data-i18n="about_conception">Conception & Coordination</h3>
-                  <p class="text-sm text-slate-500" data-i18n="about_conception_desc">UML, MERISE, Scrum.</p>
-                </div>
-              </div>
-            </article>
+    <section id="home" class="hero-section" aria-labelledby="hero-title">
+      <div class="hero-grid shell">
+        <div class="hero-copy">
+          <div id="availability-badge" class="availability"><span class="status-dot" aria-hidden="true"></span><span data-i18n="hero_available">Disponible pour missions freelance</span></div>
+          <p class="hero-eyebrow mono"><span aria-hidden="true">01 /</span> <span data-i18n="hero_greeting">Salut, je suis</span></p>
+          <h1 id="hero-title"><span id="hero-nom">Oussama Khiati</span><span class="name-period" aria-hidden="true">.</span></h1>
+          <p class="hero-role"><span class="prompt-symbol" aria-hidden="true">&gt;_</span><span id="typing">Développeur Full Stack</span><span class="typing-cursor" aria-hidden="true"></span></p>
+          <p class="hero-description" data-i18n="hero_bio">Technicien Spécialisé en Développement Digital (Full Stack). Je conçois des applications web modernes et performantes avec React.js, Laravel, PHP et MySQL.</p>
+          <div class="hero-buttons">
+            <a href="#projects" class="button"><span data-i18n="hero_cta_projects">Voir mes projets</span><span data-fa-icon="arrow-right" aria-hidden="true"></span></a>
+            <a id="hero-cv" href="CV-Oussama-Khiati.pdf" download class="button button-outline"><span data-fa-icon="file-arrow-down" aria-hidden="true"></span><span data-i18n="hero_cta_cv">Télécharger mon CV</span></a>
+          </div>
+          <div class="hero-links">
+            <a id="hero-github" href="https://github.com/khiatioussama" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><span data-fa-icon="github" aria-hidden="true"></span></a>
+            <a id="hero-linkedin" href="https://www.linkedin.com/in/oussama-khiati-15969b186" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><span data-fa-icon="linkedin-in" aria-hidden="true"></span></a>
+            <span class="link-divider" aria-hidden="true"></span>
+            <a id="hero-whatsapp" href="#" target="_blank" rel="noopener noreferrer"><span data-fa-icon="whatsapp" aria-hidden="true"></span><span data-i18n="hero_cta_whatsapp">Discuter sur WhatsApp</span></a>
           </div>
         </div>
+
+        <div class="hero-workspace">
+          <div class="workspace-caption mono"><span><span data-fa-icon="terminal" aria-hidden="true"></span> developer.workspace</span><span>v.01</span></div>
+          <div class="code-window" dir="ltr" aria-label="Profil développeur">
+            <div class="window-toolbar"><div class="window-dots" aria-hidden="true"><span></span><span></span><span></span></div><span>portfolio.ts</span><span class="window-branch"><span data-fa-icon="code" aria-hidden="true"></span> main</span></div>
+            <div class="editor-breadcrumb mono">src <span>/</span> developer <span>/</span> <b>profile.ts</b></div>
+            <div class="editor-code">
+              <div class="code-line"><span class="line-number">01</span><code><span class="syntax-comment">// Turning ideas into experiences.</span></code></div>
+              <div class="code-line"><span class="line-number">02</span><code><span class="syntax-keyword">const</span> <span class="syntax-variable">developer</span> = {</code></div>
+              <div class="code-line"><span class="line-number">03</span><code>  name: <span class="syntax-string">"<span id="code-name">Oussama Khiati</span>"</span>,</code></div>
+              <div class="code-line"><span class="line-number">04</span><code>  role: <span class="syntax-string">"Full Stack Developer"</span>,</code></div>
+              <div class="code-line"><span class="line-number">05</span><code>  location: <span class="syntax-string">"<span id="code-location">Casablanca, MA</span>"</span>,</code></div>
+              <div class="code-line"><span class="line-number">06</span><code>  stack: [</code></div>
+              <div class="code-line"><span class="line-number">07</span><code>    <span class="syntax-string">"React"</span>, <span class="syntax-string">"Laravel"</span>,</code></div>
+              <div class="code-line"><span class="line-number">08</span><code>    <span class="syntax-string">"MySQL"</span>, <span class="syntax-string">"MongoDB"</span></code></div>
+              <div class="code-line"><span class="line-number">09</span><code>  ],</code></div>
+              <div class="code-line"><span class="line-number">10</span><code>  available: <span id="code-available" class="syntax-keyword">true</span></code></div>
+              <div class="code-line"><span class="line-number">11</span><code>};</code></div>
+              <div class="code-line"><span class="line-number">12</span><code>&nbsp;</code></div>
+              <div class="code-line"><span class="line-number">13</span><code><span class="syntax-variable">developer</span>.<span class="syntax-function">buildSomethingGreat</span>();</code></div>
+            </div>
+            <div class="editor-terminal"><div class="terminal-label mono">TERMINAL <span>bash</span></div><p class="mono"><span class="terminal-prompt">❯</span> ready for the next challenge<span class="terminal-cursor" aria-hidden="true">_</span></p></div>
+            <div class="editor-status mono"><span><span data-fa-icon="code" aria-hidden="true"></span> main*</span><span><span data-fa-icon="circle-check" aria-hidden="true"></span> TypeScript</span><span>UTF-8</span></div>
+          </div>
+          <div class="workspace-note"><span class="note-icon"><span data-fa-icon="laptop-code" aria-hidden="true"></span></span><span><strong data-i18n="hero_note_title">Pensé avec soin. Codé avec passion.</strong><small data-i18n="hero_note_subtitle">De l’interface à la base de données.</small></span></div>
+        </div>
       </div>
+      <div class="hero-bottom shell"><dl id="hero-stats" class="hero-stats"></dl><a href="#about" class="scroll-cue mono"><span data-i18n="scroll_explore">Explorer</span><span data-fa-icon="arrow-down" aria-hidden="true"></span></a></div>
     </section>
 
-    <!-- ============ COMPÉTENCES ============ -->
-    <section id="skills" class="relative py-24 px-6 bg-slate-50 dark:bg-white/[0.02] border-y border-slate-200 dark:border-white/5" aria-labelledby="skills-title">
-      <div class="max-w-6xl mx-auto">
-        <header class="mb-16 reveal">
-          <p class="text-accent font-semibold text-sm uppercase tracking-widest">
-            <span aria-hidden="true">02 —</span> <span data-i18n="skills_label">Compétences</span>
-          </p>
-          <h2 id="skills-title" class="font-display font-bold text-4xl md:text-5xl mt-3" data-i18n="skills_title">Ma stack technique</h2>
-        </header>
-        <div id="skills-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-      </div>
-    </section>
+    <section class="tech-strip" aria-label="Technologies maîtrisées"><div class="shell tech-strip-inner"><p class="mono"><span class="syntax-comment">//</span> <span data-i18n="tools_label">Mes outils au quotidien</span></p><div class="marquee-viewport"><div id="marquee" class="animate-marquee"></div></div></div></section>
 
-    <!-- ============ PARCOURS ============ -->
-    <section id="experience" class="relative py-24 px-6" aria-labelledby="exp-title">
-      <div class="max-w-4xl mx-auto">
-        <header class="mb-16 reveal">
-          <p class="text-accent font-semibold text-sm uppercase tracking-widest">
-            <span aria-hidden="true">03 —</span> <span data-i18n="exp_label">Parcours</span>
-          </p>
-          <h2 id="exp-title" class="font-display font-bold text-4xl md:text-5xl mt-3" data-i18n="exp_title">Mon expérience</h2>
-        </header>
-        <ol id="timeline" class="relative pl-8 md:pl-12 list-none">
-          <div class="absolute left-2 md:left-4 top-2 bottom-2 w-px bg-gradient-to-b from-accent via-cyan to-transparent" aria-hidden="true"></div>
-        </ol>
-      </div>
-    </section>
-
-    <!-- ============ PROJETS ============ -->
-    <section id="projects" class="relative py-24 px-6 bg-slate-50 dark:bg-white/[0.02] border-y border-slate-200 dark:border-white/5" aria-labelledby="projects-title">
-      <div class="max-w-6xl mx-auto">
-        <header class="mb-16 reveal">
-          <p class="text-accent font-semibold text-sm uppercase tracking-widest">
-            <span aria-hidden="true">04 —</span> <span data-i18n="projects_label">Projets</span>
-          </p>
-          <h2 id="projects-title" class="font-display font-bold text-4xl md:text-5xl mt-3" data-i18n="projects_title">Réalisations récentes</h2>
-        </header>
-        <div id="projects-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-        <div class="text-center mt-12 reveal">
-          <a id="projects-all-link" href="https://github.com/khiatioussama" target="_blank" rel="noopener noreferrer"
-             class="inline-flex items-center gap-2 border border-slate-300 dark:border-white/20 hover:border-accent hover:bg-accent/10 font-semibold px-6 py-3 rounded-xl transition-all">
-            <span data-i18n="projects_all">Voir tous mes projets sur GitHub</span> <span aria-hidden="true">→</span>
-          </a>
+    <section id="about" class="content-section shell" aria-labelledby="about-title">
+      <header class="section-heading reveal"><p class="section-kicker mono">01 / <span data-i18n="about_label">À propos</span></p><h2 id="about-title" data-i18n="about_title">Qui suis-je ?</h2><p class="section-intro" data-i18n="about_intro">L’esprit curieux. Le code comme terrain de jeu.</p></header>
+      <div class="about-grid">
+        <div class="about-story"><div class="file-label mono"><span data-fa-icon="file-code" aria-hidden="true"></span> README.md</div><div id="about-bio" class="reveal"></div><div class="about-location"><span data-fa-icon="location-dot" aria-hidden="true"></span><span id="about-location">Casablanca, Maroc</span><span class="mono">/ UTC+1</span></div></div>
+        <div class="expertise-list reveal">
+          <article class="expertise-card"><span class="expertise-icon"><span data-fa-icon="laptop-code" aria-hidden="true"></span></span><div><span class="mono expertise-number">01 / interface</span><h3 data-i18n="about_frontend">Front-End Developer</h3><p data-i18n="about_frontend_desc">Interfaces modernes et réactives avec React.js, HTML5, CSS3, JavaScript.</p></div><span data-fa-icon="arrow-up-right-from-square" aria-hidden="true"></span></article>
+          <article class="expertise-card"><span class="expertise-icon"><span data-fa-icon="server" aria-hidden="true"></span></span><div><span class="mono expertise-number">02 / architecture</span><h3 data-i18n="about_backend">Back-End Developer</h3><p data-i18n="about_backend_desc">APIs et logique serveur avec Laravel, PHP, Node.js et MySQL.</p></div><span data-fa-icon="arrow-up-right-from-square" aria-hidden="true"></span></article>
+          <article class="expertise-card"><span class="expertise-icon"><span data-fa-icon="diagram-project" aria-hidden="true"></span></span><div><span class="mono expertise-number">03 / conception</span><h3 data-i18n="about_conception">Conception & Coordination</h3><p data-i18n="about_conception_desc">UML, MERISE, Scrum et suivi opérationnel de projets digitaux.</p></div><span data-fa-icon="arrow-up-right-from-square" aria-hidden="true"></span></article>
         </div>
       </div>
     </section>
 
-    <!-- ============ TÉMOIGNAGES ============ -->
-    <section id="temoignages" class="relative py-24 px-6" aria-labelledby="temoignages-title">
-      <div class="max-w-6xl mx-auto">
-        <header class="mb-16 reveal">
-          <p class="text-accent font-semibold text-sm uppercase tracking-widest">
-            <span aria-hidden="true">05 —</span> <span data-i18n="testimonials_label">Témoignages</span>
-          </p>
-          <h2 id="temoignages-title" class="font-display font-bold text-4xl md:text-5xl mt-3" data-i18n="testimonials_title">Ce qu'ils disent de moi</h2>
-          <p class="text-slate-600 dark:text-slate-400 mt-4 max-w-2xl" data-i18n="testimonials_desc">Recommandations.</p>
-        </header>
-        <div id="temoignages-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-      </div>
+    <section id="skills" class="section-band" aria-labelledby="skills-title"><div class="shell content-section">
+      <header class="section-heading reveal"><p class="section-kicker mono">02 / <span data-i18n="skills_label">Compétences</span></p><h2 id="skills-title" data-i18n="skills_title">Ma stack technique</h2><p class="section-intro" data-i18n="skills_intro">Les bons outils, au service de chaque idée.</p></header>
+      <div id="skills-grid" class="skills-grid"></div>
+    </div></section>
+
+    <div class="career-grid content-section shell">
+      <section id="experience" aria-labelledby="exp-title">
+        <header class="section-heading reveal"><p class="section-kicker mono">03 / <span data-i18n="exp_label">Expérience</span></p><h2 id="exp-title" data-i18n="exp_title">Mon expérience</h2><p class="section-intro" data-i18n="exp_intro">Un parcours qui évolue, commit après commit.</p></header>
+        <ol id="timeline" class="experience-timeline"></ol>
+      </section>
+      <section id="formation" aria-labelledby="formation-title">
+        <header class="section-heading reveal"><p class="section-kicker mono">04 / <span data-i18n="formation_label">Formation</span></p><h2 id="formation-title" data-i18n="formation_title">Ma formation</h2><p class="section-intro" data-i18n="formation_intro">Les bases techniques qui nourrissent ma pratique.</p></header>
+        <ol id="formation-timeline" class="experience-timeline"></ol>
+      </section>
+    </div>
+
+    <section id="projects" class="section-band" aria-labelledby="projects-title"><div class="shell content-section">
+      <header class="section-heading project-heading reveal"><div><p class="section-kicker mono">05 / <span data-i18n="projects_label">Projets</span></p><h2 id="projects-title" data-i18n="projects_title">Réalisations récentes</h2><p class="section-intro" data-i18n="projects_intro">Des idées devenues des applications concrètes.</p></div><a id="projects-all-link" href="https://github.com/khiatioussama" target="_blank" rel="noopener noreferrer" class="text-link"><span data-fa-icon="github" aria-hidden="true"></span><span data-i18n="projects_all">Voir tous mes projets sur GitHub</span><span data-fa-icon="arrow-up-right-from-square" aria-hidden="true"></span></a></header>
+      <div id="projects-grid" class="projects-grid"></div>
+    </div></section>
+
+    <section id="temoignages" class="content-section shell" aria-labelledby="temoignages-title">
+      <header class="section-heading reveal"><p class="section-kicker mono">06 / <span data-i18n="testimonials_label">Témoignages</span></p><h2 id="temoignages-title" data-i18n="testimonials_title">Ce qu’ils disent de moi</h2><p data-i18n="testimonials_desc" class="section-intro">Recommandations.</p></header><div id="temoignages-grid" class="projects-grid"></div>
     </section>
 
-    <!-- ============ CTA WHATSAPP ============ -->
-    <section class="relative py-24 px-6 overflow-hidden" aria-label="Contact rapide WhatsApp">
-      <div class="absolute inset-0 bg-gradient-to-r from-accent/10 via-cyan/5 to-whatsapp/10" aria-hidden="true"></div>
-      <div class="relative max-w-4xl mx-auto text-center reveal">
-        <h2 class="font-display font-bold text-3xl md:text-5xl mb-6">
-          <span data-i18n="cta_title">Un projet en tête ?</span><br>
-          <span class="gradient-text" data-i18n="cta_subtitle">Discutons-en sur WhatsApp.</span>
-        </h2>
-        <p class="text-slate-600 dark:text-slate-400 mb-8 max-w-xl mx-auto" data-i18n="cta_desc">Je réponds rapidement.</p>
-        <a id="cta-whatsapp" href="#" target="_blank" rel="noopener noreferrer"
-           class="inline-flex items-center gap-3 bg-whatsapp hover:bg-[#1ebe5a] text-white font-bold text-lg px-8 py-4 rounded-xl transition-all hover:scale-105">
-          <span aria-hidden="true">💬</span> <span data-i18n="cta_button">Envoyer un message WhatsApp</span>
-        </a>
-      </div>
-    </section>
+    <section class="project-invitation shell reveal" aria-label="Contact rapide WhatsApp"><div><p class="section-kicker mono">// next_project</p><h2><span data-i18n="cta_title">Un projet en tête ?</span><br><span class="accent-text" data-i18n="cta_subtitle">Discutons-en sur WhatsApp.</span></h2></div><div><p data-i18n="cta_desc">Je réponds généralement en quelques heures.</p><a id="cta-whatsapp" href="#" target="_blank" rel="noopener noreferrer" class="button"><span data-fa-icon="whatsapp" aria-hidden="true"></span><span data-i18n="cta_button">Envoyer un message WhatsApp</span><span data-fa-icon="arrow-right" aria-hidden="true"></span></a></div></section>
 
-    <!-- ============ CONTACT ============ -->
-    <section id="contact" class="relative py-24 px-6 bg-slate-50 dark:bg-white/[0.02] border-y border-slate-200 dark:border-white/5" aria-labelledby="contact-title">
-      <div class="max-w-5xl mx-auto">
-        <header class="mb-16 reveal">
-          <p class="text-accent font-semibold text-sm uppercase tracking-widest">
-            <span aria-hidden="true">06 —</span> <span data-i18n="contact_label">Contact</span>
-          </p>
-          <h2 id="contact-title" class="font-display font-bold text-4xl md:text-5xl mt-3" data-i18n="contact_title">Restons en contact</h2>
-        </header>
-
-        <div class="grid md:grid-cols-2 gap-8">
-          
-          <!-- Cartes contact -->
-          <address class="space-y-4 reveal not-italic" id="contact-links"></address>
-
-          <!-- Formulaire -->
-          <form id="contact-form" class="space-y-4 reveal">
-            <div>
-              <label for="name" class="sr-only">Nom</label>
-              <input id="name" type="text" name="name" required 
-                     class="w-full px-5 py-4 rounded-xl bg-white dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 focus:border-accent outline-none transition"
-                     data-i18n-placeholder="contact_form_name" 
-                     placeholder="Votre nom"
-                     autocomplete="name">
-            </div>
-            <div>
-              <label for="email" class="sr-only">Email</label>
-              <input id="email" type="email" name="email" required 
-                     class="w-full px-5 py-4 rounded-xl bg-white dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 focus:border-accent outline-none transition"
-                     data-i18n-placeholder="contact_form_email" 
-                     placeholder="Votre email"
-                     autocomplete="email">
-            </div>
-            <div>
-              <label for="message" class="sr-only">Message</label>
-              <textarea id="message" name="message" rows="5" required 
-                        class="w-full px-5 py-4 rounded-xl bg-white dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 focus:border-accent outline-none transition resize-none"
-                        data-i18n-placeholder="contact_form_message" 
-                        placeholder="Votre message"></textarea>
-            </div>
-            <button type="submit" 
-                    class="w-full bg-gradient-to-r from-accent to-cyan text-white font-semibold py-4 rounded-xl transition-all hover:scale-[1.02]"
-                    data-i18n="contact_form_submit">Envoyer le message</button>
-            <p id="form-status" class="text-center text-sm text-green-500 font-medium h-5" role="status" aria-live="polite"></p>
-          </form>
-        </div>
+    <section id="contact" class="content-section shell" aria-labelledby="contact-title">
+      <header class="section-heading reveal"><p class="section-kicker mono">07 / <span data-i18n="contact_label">Contact</span></p><h2 id="contact-title" data-i18n="contact_title">Restons en contact</h2><p class="section-intro" data-i18n="contact_intro">La prochaine belle collaboration commence ici.</p></header>
+      <div class="contact-grid"><div class="contact-details"><div class="file-label mono"><span data-fa-icon="terminal" aria-hidden="true"></span> let's_connect()</div><address id="contact-links" class="reveal"></address></div>
+        <form id="contact-form" class="contact-form reveal"><div class="form-caption mono"><span><span data-fa-icon="envelope" aria-hidden="true"></span> new_message</span><span>→</span></div>
+          <div class="form-row"><div><label for="name" data-i18n="contact_form_name">Votre nom</label><input id="name" name="name" type="text" required autocomplete="name" placeholder="John Doe"></div><div><label for="email" data-i18n="contact_form_email">Votre email</label><input id="email" name="email" type="email" required autocomplete="email" placeholder="hello@exemple.com"></div></div>
+          <div><label for="message" data-i18n="contact_form_message">Votre message</label><textarea id="message" name="message" rows="5" required data-i18n-placeholder="contact_form_message" placeholder="Votre message"></textarea></div>
+          <p id="email-help" class="form-help">Ce formulaire ouvre votre application e-mail pour envoyer le message.</p>
+          <button type="submit" class="button"><span data-i18n="contact_form_submit">Envoyer le message</span><span data-fa-icon="arrow-right" aria-hidden="true"></span></button>
+          <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+        </form>
       </div>
     </section>
   </main>
 
-  <!-- ============================================================
-       FOOTER
-       ============================================================ -->
-  <footer class="py-10 px-6 text-center text-slate-500 text-sm border-t border-slate-200 dark:border-white/5" role="contentinfo">
-    <p>
-      © <span id="year"></span> 
-      <span id="footer-nom">Oussama Khiati</span> — 
-      <span id="footer-titre">Développeur Full Stack</span>. 
-      <span data-i18n="footer_text">Fait avec ❤️ à Casablanca.</span>
-    </p>
-  </footer>
-
-  <!-- Bouton WhatsApp flottant -->
-  <a id="float-whatsapp" href="#" target="_blank" rel="noopener noreferrer"
-     class="fixed bottom-6 right-6 w-14 h-14 md:w-16 md:h-16 rounded-full bg-whatsapp text-white flex items-center justify-center text-2xl md:text-3xl shadow-lg hover:scale-110 transition-transform z-50 animate-float"
-     aria-label="Contacter sur WhatsApp">
-    <span aria-hidden="true">💬</span>
-  </a>
-
-  <!-- ============================================================
-       SCRIPTS (ordre IMPORTANT)
-       ============================================================ -->
+  <footer class="site-footer shell"><a class="brand" href="#home"><span data-fa-icon="code" aria-hidden="true"></span><span>oussama<span class="brand-dot">.dev</span></span></a><p>© <span id="year"></span> <span id="footer-nom">Oussama Khiati</span>. <span data-i18n="footer_text">À Casablanca.</span></p><span class="mono footer-build"><span data-fa-icon="terminal" aria-hidden="true"></span> designed to build.</span><span id="footer-titre" class="sr-only">Développeur Full Stack</span></footer>
+  <a id="float-whatsapp" href="#" class="floating-contact" target="_blank" rel="noopener noreferrer" aria-label="Contacter sur WhatsApp"><span data-fa-icon="whatsapp" aria-hidden="true"></span></a>
   <script src="config.js"></script>
+  <script src="assets/fontawesome/icons.js"></script>
+  <script src="shared.js"></script>
   <script src="translations.js"></script>
   <script src="script.js"></script>
 </body>

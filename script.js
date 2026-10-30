@@ -16,8 +16,73 @@ const $create = (tag, className = "", html = "") => {
   return el;
 };
 
+// Exact aliases keep Git/GitHub and JavaScript/Java distinct.
+const TECH_LOGOS = {
+  html: "html5", html5: "html5",
+  css: "css3", css3: "css3",
+  js: "javascript", javascript: "javascript",
+  ts: "typescript", typescript: "typescript",
+  php: "php", python: "python",
+  react: "react", reactjs: "react",
+  laravel: "laravel", jquery: "jquery",
+  node: "nodejs", nodejs: "nodejs",
+  mysql: "mysql", mysqlworkbench: "mysql", mongodb: "mongodb", mongo: "mongodb",
+  vscode: "vscode", visualstudiocode: "vscode",
+  git: "git", github: "github",
+};
+
+const TECH_SYMBOLS = {
+  uml: "diagram-project", merise: "sitemap", scrum: "list-check",
+  api: "plug", fetch: "download", localstorage: "hard-drive",
+};
+const LANGUAGE_FLAGS = {
+  arabe: "ma", arabic: "ma", francais: "fr", french: "fr",
+  anglais: "gb", english: "gb", italien: "it", italienb1: "it", italian: "it",
+};
+
+function technologyIcon(item) {
+  const key = String(item).normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (Object.hasOwn(LANGUAGE_FLAGS, key)) {
+    return `<img class="tech-logo tech-flag" src="assets/tech-icons/flag-${LANGUAGE_FLAGS[key]}.svg" width="29" height="22" alt="" aria-hidden="true" decoding="async">`;
+  }
+  if (Object.hasOwn(TECH_LOGOS, key)) {
+    const logo = TECH_LOGOS[key];
+    const detail = key === "mysqlworkbench"
+      ? `<span class="tech-logo-detail">${Portfolio.icon("gear")}</span>` : "";
+    return `<span class="tech-logo-wrap" aria-hidden="true"><img class="tech-logo tech-logo-${logo}" src="assets/tech-icons/${logo}.svg" width="28" height="28" alt="" decoding="async">${detail}</span>`;
+  }
+  const symbol = Object.hasOwn(TECH_SYMBOLS, key) ? TECH_SYMBOLS[key] : "code";
+  return Portfolio.icon(symbol);
+}
+
+function technologyBadge(item) {
+  return `<li class="tech-badge skill-badge" tabindex="0" title="${escapeHtml(item)}" aria-label="${escapeHtml(item)}">${technologyIcon(item)}<span class="sr-only">${escapeHtml(item)}</span></li>`;
+}
+
+function refreshIcons() {
+  $$("[data-fa-icon]").forEach((slot) => {
+    const name = slot.dataset.faIcon;
+    if (slot.dataset.iconRendered === name) return;
+    slot.innerHTML = Portfolio.icon(name);
+    slot.dataset.iconRendered = name;
+  });
+}
+
+function applyAdminPreview() {
+  const saved = Portfolio.storage.getItem("portfolioConfig");
+  if (!saved) return;
+  try {
+    const preview = JSON.parse(saved);
+    Object.assign(CONFIG, Portfolio.migrateJourney(preview));
+  } catch (error) {
+    console.warn("Configuration locale de prévisualisation invalide.");
+  }
+}
+applyAdminPreview();
+
 function escapeHtml(str) {
-  if (typeof str !== "string") return str ?? "";
+  str = String(str ?? "");
   return str
     .replace(/&/g, "&amp;")
     .replace(/"/g, "&quot;")
@@ -37,28 +102,18 @@ const ghUrl = `https://github.com/${CONFIG.github}`;
 (function initTheme() {
   const html = document.documentElement;
   const toggle = $("theme-toggle");
-  const icon = $("theme-icon");
-
-  const saved = localStorage.getItem("theme");
-  const sysDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-  // Appliquer le thème initial
-  if (saved === "light" || (!saved && !sysDark)) {
-    html.classList.remove("dark");
-    if (icon) icon.textContent = "☀️";
-  } else {
-    html.classList.add("dark");
-    if (icon) icon.textContent = "🌙";
-  }
-
-  // Toggle au clic
-  if (toggle) {
-    toggle.addEventListener("click", () => {
-      const isDark = html.classList.toggle("dark");
-      if (icon) icon.textContent = isDark ? "🌙" : "☀️";
-      localStorage.setItem("theme", isDark ? "dark" : "light");
-    });
-  }
+  html.classList.toggle("dark", Portfolio.storage.getItem("theme") !== "light");
+  const update = () => {
+    const dark = html.classList.contains("dark");
+    if ($("theme-icon")) $("theme-icon").innerHTML = Portfolio.icon(dark ? "sun" : "moon");
+    toggle?.setAttribute("aria-pressed", String(dark));
+  };
+  update();
+  toggle?.addEventListener("click", () => {
+    html.classList.toggle("dark");
+    Portfolio.storage.setItem("theme", html.classList.contains("dark") ? "dark" : "light");
+    update();
+  });
 })();
 
 /* ============================================
@@ -66,11 +121,11 @@ const ghUrl = `https://github.com/${CONFIG.github}`;
    ============================================ */
 const I18N = {
   current: "fr",
-  flags: { fr: "🇫🇷", en: "🇬🇧", ar: "🇲🇦" },
+  flags: { fr: "fr", en: "gb", ar: "ma" },
   codes: { fr: "FR", en: "EN", ar: "AR" },
 
   init() {
-    const saved = localStorage.getItem("langue");
+    const saved = Portfolio.storage.getItem("langue");
     const browser = navigator.language.substring(0, 2);
     const detected = CONFIG.languesDisponibles.includes(browser)
       ? browser
@@ -86,7 +141,7 @@ const I18N = {
       lang = "fr";
     }
     this.current = lang;
-    localStorage.setItem("langue", lang);
+    Portfolio.storage.setItem("langue", lang);
 
     document.documentElement.setAttribute("lang", lang);
     document.documentElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
@@ -97,7 +152,9 @@ const I18N = {
       const t = TRANSLATIONS[lang][key];
       if (t) {
         if (el.dataset.i18nHtml === "true") el.innerHTML = t;
-        else el.textContent = t;
+        else if (el.classList.contains("mobile-link") && el.querySelector(":scope > span")) {
+          el.querySelector(":scope > span").textContent = t;
+        } else el.textContent = t;
       }
     });
 
@@ -111,7 +168,7 @@ const I18N = {
     // Mettre à jour le bouton de langue
     const flag = $("lang-flag");
     const code = $("lang-code");
-    if (flag) flag.textContent = this.flags[lang];
+    if (flag) flag.innerHTML = `<img src="assets/tech-icons/flag-${this.flags[lang]}.svg" width="20" height="15" alt="" aria-hidden="true">`;
     if (code) code.textContent = this.codes[lang];
 
     // Fermer le dropdown
@@ -165,23 +222,15 @@ const I18N = {
    ============================================ */
 function injectIdentity() {
   document.title = `${CONFIG.nom} | ${CONFIG.titre}`;
-
-  const heroNom = $("hero-nom");
-  if (heroNom) heroNom.textContent = CONFIG.nom;
-
-  const footerNom = $("footer-nom");
-  if (footerNom) footerNom.textContent = CONFIG.nom;
-
-  const footerTitre = $("footer-titre");
-  if (footerTitre) footerTitre.textContent = CONFIG.titre;
-
-  const logo = $("logo-nom");
-  if (logo) {
-    logo.innerHTML = `${CONFIG.prenom.substring(0, 2).toUpperCase()}<span class="text-accent">.</span>`;
-  }
-
-  const year = $("year");
-  if (year) year.textContent = new Date().getFullYear();
+  ["hero-nom", "footer-nom", "code-name"].forEach(id => { if ($(id)) $(id).textContent = CONFIG.nom; });
+  if ($("footer-titre")) $("footer-titre").textContent = CONFIG.titre;
+  if ($("code-location")) $("code-location").textContent = `${CONFIG.ville}, ${CONFIG.pays}`;
+  if ($("about-location")) $("about-location").textContent = `${CONFIG.ville}, ${CONFIG.pays}`;
+  if ($("code-available")) $("code-available").textContent = String(Boolean(CONFIG.disponible));
+  if ($("availability-badge")) $("availability-badge").hidden = !CONFIG.disponible;
+  if ($("hero-github")) $("hero-github").href = ghUrl;
+  if ($("hero-linkedin")) $("hero-linkedin").href = liUrl;
+  if ($("year")) $("year").textContent = new Date().getFullYear();
 }
 
 /* ============================================
@@ -207,7 +256,7 @@ function injectWhatsApp() {
 function injectCV() {
   const cv = $("hero-cv");
   if (cv && CONFIG.cv) {
-    cv.href = CONFIG.cv;
+    cv.href = Portfolio.url(CONFIG.cv);
     cv.setAttribute("download", CONFIG.cv);
   }
 }
@@ -226,7 +275,7 @@ function injectBio() {
   const link = $create(
     "a",
     "inline-flex items-center gap-2 text-accent hover:text-accent-light font-semibold mt-4 group",
-    `Voir mon LinkedIn <span class="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>`,
+    `${Portfolio.icon("linkedin-in")} ${I18N.t("contact_linkedin_desc")} ${Portfolio.icon("arrow-up-right-from-square")}`,
   );
   link.href = liUrl;
   link.target = "_blank";
@@ -246,9 +295,9 @@ function injectStats() {
     const label = TRANSLATIONS[I18N.current]?.[s.labelKey] || s.labelKey;
     const div = $create("div", "");
     div.innerHTML = `
-      <dt class="text-xs md:text-sm text-slate-500">${escapeHtml(label)}</dt>
-      <dd class="font-display font-bold text-2xl md:text-3xl text-slate-900 dark:text-white">
-        <span class="counter" data-target="${s.valeur}" data-suffix="${s.suffixe || ""}" data-duration="2000">0</span>
+      <dt>${escapeHtml(label)}</dt>
+      <dd>
+        <span class="counter" data-target="${s.valeur}" data-suffix="${escapeHtml(s.suffixe || "")}" data-duration="2000">0</span>
       </dd>
     `;
     dl.appendChild(div);
@@ -321,82 +370,47 @@ function injectSkills() {
   const grid = $("skills-grid");
   if (!grid) return;
   grid.innerHTML = "";
-
-  CONFIG.competences.forEach((c) => {
-    const badges = c.items
-      .map(
-        (i) =>
-          `<li class="px-3 py-1 rounded-full text-xs font-medium bg-accent/10 text-accent-light border border-accent/20">${escapeHtml(i)}</li>`,
-      )
-      .join("");
-
-    const level = c.niveau || 80;
-
-    grid.appendChild(
-      $create(
-        "article",
-        "p-8 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 hover:border-accent/50 transition reveal",
-        `<div class="text-4xl mb-4" aria-hidden="true">${c.icone}</div>
-       <h3 class="font-display font-semibold text-xl text-slate-900 dark:text-white mb-3">${escapeHtml(c.titre)}</h3>
-       <ul class="flex flex-wrap gap-2 mb-4">${badges}</ul>
-       <div class="skill-bar" aria-label="Niveau : ${level}%">
-         <div class="skill-fill" data-width="${level}%"></div>
-       </div>`,
-      ),
-    );
+  const categoryIcons = ["code", "layer-group", "database", "diagram-project", "screwdriver-wrench", "globe"];
+  const configuredIcons = {code: "code", layers: "layer-group", database: "database", grid: "diagram-project", tools: "screwdriver-wrench", globe: "globe"};
+  CONFIG.competences.forEach((category, index) => {
+    const level = Math.max(0, Math.min(100, Number(category.niveau) || 0));
+    const symbol = Object.hasOwn(configuredIcons, category.icone) ? configuredIcons[category.icone] : categoryIcons[index % categoryIcons.length];
+    grid.appendChild($create("article", "skill-card reveal", `
+      <div class="skill-card-top"><span class="skill-category-icon">${Portfolio.icon(symbol)}</span><span class="mono">/${String(index + 1).padStart(2, "0")}</span></div>
+      <h3>${escapeHtml(category.titre)}</h3>
+      <ul class="technology-list">${category.items.map(technologyBadge).join("")}</ul>
+      <div class="skill-level"><span>${I18N.t("skill_level")}</span><span>${level}%</span></div>
+      <div class="skill-bar" role="meter" aria-label="${escapeHtml(category.titre)}" aria-valuenow="${level}" aria-valuemin="0" aria-valuemax="100"><div class="skill-fill" data-width="${level}%"></div></div>
+    `));
   });
-
-  // Animer les barres au scroll
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          const fill = e.target.querySelector(".skill-fill");
-          if (fill) fill.style.width = fill.dataset.width;
-          observer.unobserve(e.target);
-        }
-      });
-    },
-    { threshold: 0.3 },
-  );
-
-  grid.querySelectorAll(".skill-bar").forEach((bar) => observer.observe(bar));
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const fill = entry.target.querySelector(".skill-fill");
+      if (fill) fill.style.width = fill.dataset.width;
+      observer.unobserve(entry.target);
+    });
+  }, {threshold: .3});
+  grid.querySelectorAll(".skill-bar").forEach(bar => observer.observe(bar));
 }
 
 /* ============================================
    10. INJECTION — TIMELINE
    ============================================ */
 function injectTimeline() {
-  const timeline = $("timeline");
-  if (!timeline) return;
-
-  // Garder la ligne verticale
-  const line = timeline.querySelector('div[aria-hidden="true"]');
-  timeline.innerHTML = "";
-  if (line) timeline.appendChild(line);
-
-  const colors = ["bg-accent", "bg-cyan", "bg-green-400", "bg-purple-400"];
-
-  CONFIG.experiences.forEach((exp, i) => {
-    const missions = exp.missions.length
-      ? `<ul class="text-slate-600 dark:text-slate-400 text-sm space-y-1.5 list-disc list-inside mt-2">
-           ${exp.missions.map((m) => `<li>${escapeHtml(m)}</li>`).join("")}
-         </ul>`
-      : "";
-
-    timeline.appendChild(
-      $create(
-        "li",
-        "relative mb-12 reveal",
-        `<div class="absolute -left-8 md:-left-12 top-1 w-5 h-5 rounded-full ${colors[i % colors.length]} border-4 border-white dark:border-[#0a0a0f]" aria-hidden="true"></div>
-       <time datetime="${exp.date}" class="inline-block px-3 py-1 rounded-full bg-accent/10 text-accent-light text-xs font-semibold mb-3">
-         ${escapeHtml(exp.dateLabel)}
-       </time>
-       <h3 class="font-display font-semibold text-xl text-slate-900 dark:text-white mb-1">${escapeHtml(exp.titre)}</h3>
-       ${exp.entreprise ? `<p class="text-slate-500 text-sm mb-3">${escapeHtml(exp.entreprise)}</p>` : ""}
-       ${missions}`,
-      ),
-    );
+  [["timeline", CONFIG.experiences], ["formation-timeline", CONFIG.formations]].forEach(([id, entries]) => {
+    const timeline = $(id);
+    if (!timeline) return;
+    timeline.innerHTML = "";
+    entries.forEach(exp => {
+      const missions = exp.missions.length ? `<ul>${exp.missions.map(m => `<li>${escapeHtml(m)}</li>`).join("")}</ul>` : "";
+      timeline.appendChild($create("li", "experience-item reveal", `
+        <time class="experience-date" datetime="${escapeHtml(exp.date.split('/')[0])}">${escapeHtml(exp.dateLabel)}</time>
+        <div class="experience-content"><h3>${escapeHtml(exp.titre)}</h3>
+        ${exp.entreprise ? `<p class="experience-company">${escapeHtml(exp.entreprise)}</p>` : ""}
+        ${missions}</div>
+      `));
+    });
   });
 }
 
@@ -407,48 +421,19 @@ function injectProjects() {
   const grid = $("projects-grid");
   if (!grid) return;
   grid.innerHTML = "";
-
-  CONFIG.projets.forEach((p, i) => {
-    const tags = p.technos
-      .map(
-        (t) =>
-          `<li class="px-2.5 py-1 rounded-md text-xs font-medium bg-accent/10 text-accent-light">${escapeHtml(t)}</li>`,
-      )
-      .join("");
-
-    const isImage =
-      p.icone &&
-      (p.icone.startsWith("data:image") || p.icone.startsWith("http"));
+  const symbols = ["cart-shopping", "list-check", "cloud-sun"];
+  CONFIG.projets.forEach((project, index) => {
+    const isImage = project.icone && /^(data:image|https?:)/.test(project.icone);
     const visual = isImage
-      ? `<div class="h-44 overflow-hidden">
-<img src="${p.icone}" alt="${escapeHtml(p.titre)}" width="400" height="300" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" decoding="async">         </div>`
-      : `<div class="h-44 bg-gradient-to-br from-accent/30 to-cyan/20 flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-500" aria-hidden="true">${p.icone}</div>`;
-
-    const caseLink = p.etudeDeCas
-      ? `<a href="etudes-de-cas.html#projet-${i}" class="text-sm font-semibold text-accent hover:text-accent-light">${I18N.t("projects_case_study")} →</a>`
-      : "";
-
-    grid.appendChild(
-      $create(
-        "article",
-        "group rounded-2xl overflow-hidden bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 hover:border-accent/50 transition reveal",
-        `${visual}
-       <div class="p-6">
-         <h3 class="font-display font-semibold text-lg text-slate-900 dark:text-white mb-2">${escapeHtml(p.titre)}</h3>
-         <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">${escapeHtml(p.description)}</p>
-         <ul class="flex flex-wrap gap-2 mb-4">${tags}</ul>
-         <div class="flex flex-wrap items-center gap-3">
-           ${caseLink}
-           <a href="${p.lien}" target="_blank" rel="noopener noreferrer" class="text-sm text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">GitHub</a>
-         </div>
-       </div>`,
-      ),
-    );
+      ? `<div class="project-preview is-image"><img src="${escapeHtml(Portfolio.url(project.icone, true))}" alt="${escapeHtml(project.titre)}" width="400" height="230" loading="lazy" decoding="async"></div>`
+      : `<div class="project-preview" aria-hidden="true"><div class="preview-top"><span>~/projects/${String(index + 1).padStart(2, "0")}</span>${Portfolio.icon("folder-open")}</div><div class="preview-illustration"><span class="preview-bracket">{</span>${Portfolio.icon(symbols[index % symbols.length])}<span class="preview-bracket">}</span></div><div class="preview-footer"><span></span><span></span><span></span></div></div>`;
+    grid.appendChild($create("article", "project-card reveal", `${visual}<div class="project-body">
+      <h3>${escapeHtml(project.titre)}</h3><p>${escapeHtml(project.description)}</p>
+      <ul class="technology-list">${project.technos.map(technologyBadge).join("")}</ul>
+      <div class="project-actions"><a href="${escapeHtml(Portfolio.url(project.lien))}" target="_blank" rel="noopener noreferrer">${Portfolio.icon("github")} GitHub</a></div>
+    </div>`));
   });
-
-  // Lien "voir tous les projets"
-  const allLink = $("projects-all-link");
-  if (allLink) allLink.href = ghUrl;
+  if ($("projects-all-link")) $("projects-all-link").href = ghUrl;
 }
 
 /* ============================================
@@ -459,7 +444,8 @@ function injectTestimonials() {
   if (!grid) return;
   grid.innerHTML = "";
 
-  CONFIG.temoignages.forEach((t) => {
+  CONFIG.temoignages.filter(t => t.nom !== "Nouveau nom" && t.citation !== "Citation à remplir...").forEach((t) => {
+    t = { ...t, note: Math.max(0, Math.min(5, Math.round(Number(t.note) || 0))) };
     const etoiles = t.note
       ? `<div class="flex gap-0.5 mb-3" aria-label="Note : ${t.note} sur 5">
            ${"★"
@@ -479,7 +465,7 @@ function injectTestimonials() {
       : "";
 
     const linkedin = t.linkedin
-      ? `<a href="https://www.linkedin.com/in/${t.linkedin}" target="_blank" rel="noopener noreferrer" class="ml-auto text-slate-400 hover:text-accent text-sm font-bold" aria-label="LinkedIn de ${escapeHtml(t.nom)}">in</a>`
+      ? `<a href="https://www.linkedin.com/in/${encodeURIComponent(t.linkedin)}" target="_blank" rel="noopener noreferrer" class="ml-auto text-slate-400 hover:text-accent text-sm font-bold" aria-label="LinkedIn de ${escapeHtml(t.nom)}">in</a>`
       : "";
 
     grid.appendChild(
@@ -505,6 +491,9 @@ function injectTestimonials() {
       ),
     );
   });
+  const section = grid.closest("section");
+  if (section) section.hidden = grid.children.length === 0;
+  document.querySelectorAll('a[href="#temoignages"]').forEach(link => { (link.closest('li') || link).hidden = grid.children.length === 0; });
 }
 
 /* ============================================
@@ -513,53 +502,19 @@ function injectTestimonials() {
 function injectContact() {
   const container = $("contact-links");
   if (!container) return;
-  container.innerHTML = "";
-
   const links = [
-    {
-      icon: "💬",
-      titre: I18N.t("contact_whatsapp"),
-      desc: "WhatsApp",
-      url: waUrl(`Bonjour ${CONFIG.prenom}`),
-      color: "whatsapp",
-    },
-    {
-      icon: "✉️",
-      titre: I18N.t("contact_email"),
-      desc: CONFIG.email,
-      url: `mailto:${CONFIG.email}`,
-      color: "accent",
-    },
-    {
-      icon: "in",
-      titre: I18N.t("contact_linkedin"),
-      desc: I18N.t("contact_linkedin_desc"),
-      url: liUrl,
-      color: "cyan",
-    },
-    {
-      icon: "⌥",
-      titre: I18N.t("contact_github"),
-      desc: "@" + CONFIG.github,
-      url: ghUrl,
-      color: "purple-400",
-    },
+    {icon: "whatsapp", title: I18N.t("contact_whatsapp"), description: "WhatsApp", url: waUrl(`Bonjour ${CONFIG.prenom}`)},
+    {icon: "envelope", title: I18N.t("contact_email"), description: CONFIG.email, url: `mailto:${CONFIG.email}`},
+    {icon: "linkedin-in", title: I18N.t("contact_linkedin"), description: I18N.t("contact_linkedin_desc"), url: liUrl},
+    {icon: "github", title: "GitHub", description: "@" + CONFIG.github, url: ghUrl},
   ];
-
-  links.forEach((l) => {
-    const a = $create(
-      "a",
-      "flex items-center gap-4 p-5 rounded-2xl bg-white dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 hover:border-accent transition",
-      `<div class="w-12 h-12 rounded-xl bg-${l.color}/20 flex items-center justify-center text-2xl">${l.icon}</div>
-       <div>
-         <h3 class="font-semibold text-slate-900 dark:text-white">${escapeHtml(l.titre)}</h3>
-         <p class="text-sm text-slate-500">${escapeHtml(l.desc)}</p>
-       </div>`,
-    );
-    a.href = l.url;
-    a.target = "_blank";
-    a.rel = "noopener noreferrer";
-    container.appendChild(a);
+  container.innerHTML = "";
+  links.forEach(link => {
+    const anchor = $create("a", "contact-card", `<span class="contact-icon">${Portfolio.icon(link.icon)}</span><div><h3>${escapeHtml(link.title)}</h3><p>${escapeHtml(link.description)}</p></div>${Portfolio.icon("arrow-up-right-from-square")}`);
+    anchor.href = link.url;
+    anchor.target = "_blank";
+    anchor.rel = "noopener noreferrer";
+    container.appendChild(anchor);
   });
 }
 
@@ -570,16 +525,12 @@ function injectMarquee() {
   const m = $("marquee");
   if (!m) return;
 
-  const content = CONFIG.technosMarquee
-    .map(
-      (t) =>
-        `<span class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-slate-100 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 text-sm font-medium text-slate-700 dark:text-slate-300">
-      <span class="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true"></span>${escapeHtml(t)}
-    </span>`,
-    )
-    .join("");
+  const group = (duplicate = false) => `<div class="marquee-group"${duplicate ? ' aria-hidden="true"' : ''}>${CONFIG.technosMarquee.map(t =>
+    `<span class="tech-badge"${duplicate ? '' : ' tabindex="0"'} title="${escapeHtml(t)}">${technologyIcon(t)}<span class="sr-only">${escapeHtml(t)}</span></span>`
+  ).join("")}</div>`;
 
-  m.innerHTML = content + content;
+  m.innerHTML = group() + group(true);
+  refreshIcons();
 }
 
 /* ============================================
@@ -594,12 +545,13 @@ function initTyping() {
   // Annuler un éventuel ancien typing
   if (typingTimeout) clearTimeout(typingTimeout);
 
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = CONFIG.motsAnimes[0] || CONFIG.titre; return; }
   let wordIndex = 0;
   let charIndex = 0;
   let deleting = false;
 
   const type = () => {
-    const current = CONFIG.motsAnimes[wordIndex];
+    const current = CONFIG.motsAnimes[wordIndex] || CONFIG.titre;
 
     if (deleting) {
       el.textContent = current.substring(0, --charIndex);
@@ -630,30 +582,9 @@ function initTyping() {
 function initNavbarScroll() {
   const nav = $("navbar");
   if (!nav) return;
-
-  window.addEventListener(
-    "scroll",
-    () => {
-      const isDark = document.documentElement.classList.contains("dark");
-      if (window.scrollY > 50) {
-        nav.classList.add("backdrop-blur-xl", "border-b");
-        nav.classList.toggle("bg-white/80", !isDark);
-        nav.classList.toggle("bg-[#0a0a0f]/80", isDark);
-        nav.classList.toggle("border-slate-200", !isDark);
-        nav.classList.toggle("border-white/10", isDark);
-      } else {
-        nav.classList.remove(
-          "backdrop-blur-xl",
-          "border-b",
-          "bg-white/80",
-          "bg-[#0a0a0f]/80",
-          "border-slate-200",
-          "border-white/10",
-        );
-      }
-    },
-    { passive: true },
-  );
+  const update = () => nav.classList.toggle("is-scrolled", window.scrollY > 30);
+  update();
+  window.addEventListener("scroll", update, {passive: true});
 }
 
 /* ============================================
@@ -662,29 +593,56 @@ function initNavbarScroll() {
 function initMobileMenu() {
   const burger = $("burger");
   const menu = $("mobile-menu");
+  const closeButton = $("mobile-menu-close");
   if (!burger || !menu) return;
 
+  const closeMenu = ({ restoreFocus = true } = {}) => {
+    menu.classList.add("translate-x-full");
+    menu.setAttribute("aria-hidden", "true");
+    menu.inert = true;
+    burger.setAttribute("aria-expanded", "false");
+    burger.innerHTML = Portfolio.icon("bars");
+    burger.setAttribute("aria-label", "Ouvrir le menu");
+    document.body.style.overflow = "";
+    if (restoreFocus) burger.focus({ preventScroll: true });
+  };
+
+  const openMenu = () => {
+    menu.classList.remove("translate-x-full");
+    menu.setAttribute("aria-hidden", "false");
+    menu.inert = false;
+    burger.setAttribute("aria-expanded", "true");
+    burger.innerHTML = Portfolio.icon("xmark");
+    burger.setAttribute("aria-label", "Fermer le menu");
+    document.body.style.overflow = "hidden";
+    closeButton?.focus({ preventScroll: true });
+  };
+
+  // Utiliser des fonctions explicites évite les états désynchronisés après un retour navigateur.
   burger.addEventListener("click", () => {
-    const open = !menu.classList.toggle("translate-x-full");
-    burger.setAttribute("aria-expanded", String(open));
-    document.body.style.overflow = open ? "hidden" : "";
+    const isOpen = burger.getAttribute("aria-expanded") === "true";
+    if (isOpen) closeMenu();
+    else openMenu();
   });
 
-  $$(".mobile-link").forEach((l) => {
-    l.addEventListener("click", () => {
-      menu.classList.add("translate-x-full");
-      burger.setAttribute("aria-expanded", "false");
-      document.body.style.overflow = "";
-    });
+  closeButton?.addEventListener("click", () => closeMenu());
+
+  $$(".mobile-link, #mobile-whatsapp").forEach((l) => {
+    l.addEventListener("click", () => closeMenu({ restoreFocus: false }));
   });
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !menu.classList.contains("translate-x-full")) {
-      menu.classList.add("translate-x-full");
-      burger.setAttribute("aria-expanded", "false");
-      document.body.style.overflow = "";
+    if (e.key === "Escape" && burger.getAttribute("aria-expanded") === "true") {
+      closeMenu();
     }
   });
+
+  window.addEventListener("resize", () => {
+    if (window.matchMedia("(min-width: 951px)").matches) closeMenu({ restoreFocus: false });
+  });
+
+  window.addEventListener("pageshow", () => closeMenu({ restoreFocus: false }));
+  closeMenu({ restoreFocus: false });
 }
 
 /* ============================================
@@ -747,13 +705,20 @@ function initForm() {
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    const status = $("form-status");
-    if (status) {
-      status.textContent = I18N.t("contact_form_success");
-      setTimeout(() => (status.textContent = ""), 5000);
-    }
-    form.reset();
-  });
+   const formData = new FormData(form);
+   const name = String(formData.get("name") || "").trim();
+   const email = String(formData.get("email") || "").trim();
+   const message = String(formData.get("message") || "").trim();
+   if (!name || !message || !form.reportValidity()) return;
+   const subject = encodeURIComponent(`Portfolio — message de ${name}`);
+   const body = encodeURIComponent(`Nom: ${name}\nEmail: ${email}\n\n${message}`);
+
+   const status = $("form-status");
+   if (status) {
+     status.textContent = "Ouverture de votre application e-mail...";
+   }
+   window.location.href = `mailto:${CONFIG.email}?subject=${subject}&body=${body}`;
+ });
 }
 
 /* ============================================
@@ -778,6 +743,7 @@ function init() {
   initCursor();
   initReveal();
   initForm();
+  refreshIcons();
 }
 
 /* ============================================
@@ -790,7 +756,7 @@ document.addEventListener("languageChanged", () => {
   injectProjects();
   injectTestimonials();
   injectContact();
-  // Le typing continue (pas besoin de relancer)
+  initReveal();
 });
 
 /* ============================================

@@ -4,7 +4,12 @@
   "description": "",
   "main": "admin.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tailwindcss -i ./input.css -o ./tailwind.min.css --minify && node build.cjs",
+    "dev": "tailwindcss -i ./input.css -o ./tailwind.min.css --watch",
+    "start": "node server.js",
+    "serve": "node server.js",
+    "check": "node --check config.js && node --check translations.js && node --check script.js && node --check admin.js && node --check shared.js && node --check assets/fontawesome/icons.js && node --check server.js && node --check build.cjs",
+    "test": "node --test security.test.cjs"
   },
   "keywords": [],
   "author": "",
@@ -12,5 +17,8 @@
   "type": "commonjs",
   "devDependencies": {
     "tailwindcss": "^3.4.19"
+  },
+  "dependencies": {
+    "lucide": "^1.63.0"
   }
 }

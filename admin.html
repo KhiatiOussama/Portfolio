@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow">
     <title>Admin — Portfolio Oussama Khiati</title>
-    <link rel="shortcut icon" href="favicon-32x32.png" type="image/x-icon">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" sizes="any">
+    <link rel="stylesheet" href="tailwind.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
     <style>
@@ -98,6 +99,10 @@
                 </p>
             </div>
             <div class="flex gap-3">
+                <button id="btn-reset"
+                    class="px-5 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 font-semibold transition">
+                    ↺ Réinitialiser
+                </button>
                 <button id="btn-preview"
                     class="px-5 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 font-semibold transition">
                     👁️ Aperçu
@@ -121,7 +126,8 @@
             <button class="tab-btn" data-tab="bio">📝 Bio</button>
             <button class="tab-btn" data-tab="stats">📊 Stats</button>
             <button class="tab-btn" data-tab="competences">🛠️ Compétences</button>
-            <button class="tab-btn" data-tab="experiences">💼 Parcours</button>
+            <button class="tab-btn" data-tab="experiences">💼 Expériences</button>
+            <button class="tab-btn" data-tab="formations">📚 Formation</button>
             <button class="tab-btn" data-tab="projets">🚀 Projets</button>
             <button class="tab-btn" data-tab="temoignages">⭐ Avis</button>
         </nav>
@@ -214,6 +220,15 @@
                 </button>
             </section>
 
+            <section id="tab-formations" class="tab-content hidden">
+                <h2 class="text-xl font-bold mb-4">Formation</h2>
+                <div id="formations-container" class="space-y-4"></div>
+                <button onclick="addFormation()"
+                    class="mt-3 px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 font-semibold">
+                    + Ajouter une formation
+                </button>
+            </section>
+
             <section id="tab-projets" class="tab-content hidden">
                 <h2 class="text-xl font-bold mb-4">Projets</h2>
                 <p class="text-sm text-slate-500 mb-4">
@@ -225,7 +240,7 @@
                     + Ajouter un projet
                 </button>
             </section>
-            <!-- ⭐ TÉMOIGNAGES / AVIS -->
+
             <!-- ⭐ TÉMOIGNAGES / AVIS -->
             <section id="tab-temoignages" class="tab-content hidden">
                 <div class="flex items-start justify-between flex-wrap gap-3 mb-4">
@@ -252,9 +267,12 @@
                 💾 Sauvegarder
             </button>
         </div>
+        <div id="admin-status" class="fixed bottom-24 right-6 z-50 hidden px-4 py-3 rounded-lg bg-slate-800 border border-white/10 text-sm text-slate-100 shadow-xl" role="status" aria-live="polite"></div>
     </div>
 
     <script src="config.js"></script>
+  <script src="assets/fontawesome/icons.js"></script>
+  <script src="shared.js"></script>
     <script src="admin.js"></script>
 </body>
 

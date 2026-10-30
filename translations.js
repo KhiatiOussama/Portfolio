@@ -9,14 +9,24 @@ const TRANSLATIONS = {
   // FRANÇAIS
   // ============================================
   fr: {
+    nav_cta: "Parlons projet",
+    hero_note_title: "Pensé avec soin. Codé avec passion.",
+    hero_note_subtitle: "De l’interface à la base de données.",
+    scroll_explore: "Explorer",
+    tools_label: "Mes outils au quotidien",
+    about_intro: "L’esprit curieux. Le code comme terrain de jeu.",
+    skills_intro: "Les bons outils, au service de chaque idée.",
+    skill_level: "Maîtrise",
+    exp_intro: "Un parcours qui évolue, commit après commit.",
+    projects_intro: "Des idées devenues des applications concrètes.",
+    contact_intro: "La prochaine belle collaboration commence ici.",
     // ---- NAVIGATION ----
     nav_about: "À propos",
     nav_skills: "Compétences",
-    nav_experience: "Parcours",
+    nav_experience: "Expérience",
+    nav_formation: "Formation",
     nav_projects: "Projets",
     nav_testimonials: "Avis",
-    nav_cases: "Études de cas",
-    nav_blog: "Blog",
     nav_contact: "Contact",
     nav_whatsapp: "WhatsApp",
 
@@ -48,15 +58,17 @@ const TRANSLATIONS = {
     skills_title: "Ma stack technique",
 
     // ---- EXPERIENCE ----
-    exp_label: "Parcours",
+    exp_label: "Expérience",
     exp_title: "Mon expérience",
+    formation_label: "Formation",
+    formation_title: "Ma formation",
+    formation_intro: "Les bases techniques qui nourrissent ma pratique.",
 
     // ---- PROJECTS ----
     projects_label: "Projets",
     projects_title: "Réalisations récentes",
     projects_github: "Voir sur GitHub",
     projects_all: "Voir tous mes projets sur GitHub",
-    projects_case_study: "Voir l'étude de cas",
 
     // ---- TESTIMONIALS ----
     testimonials_label: "Témoignages",
@@ -84,41 +96,35 @@ const TRANSLATIONS = {
     contact_form_success: "✅ Merci ! Je te répondrai rapidement.",
 
     // ---- FOOTER ----
-    footer_text: "Fait avec ❤️ à Casablanca.",
+    footer_text: "À Casablanca.",
 
     // ---- ÉTUDES DE CAS ----
-    case_toc: "Sommaire",
-    case_context: "Le contexte",
-    case_challenge: "Le défi",
-    case_solution: "Ma solution",
-    case_results: "Les résultats",
-    case_lessons: "Ce que j'ai appris",
-    case_demo: "Voir la démo",
-    case_code: "Voir le code",
-    case_role: "Rôle",
-    case_duration: "Durée",
-    case_back: "Retour au portfolio",
 
     // ---- BLOG ----
-    blog_title: "Articles techniques",
-    blog_subtitle: "Retours d'expérience, astuces et réflexions sur le développement web.",
-    blog_read: "Lire l'article",
-    blog_back: "Retour au portfolio",
-    blog_empty: "Aucun article pour le moment."
   },
 
   // ============================================
   // ENGLISH
   // ============================================
   en: {
+    nav_cta: "Let's talk",
+    hero_note_title: "Thoughtfully crafted. Passionately coded.",
+    hero_note_subtitle: "From the interface to the database.",
+    scroll_explore: "Explore",
+    tools_label: "My everyday toolkit",
+    about_intro: "A curious mind. A passion for building.",
+    skills_intro: "The right tools to bring each idea to life.",
+    skill_level: "Proficiency",
+    exp_intro: "An evolving journey, one commit at a time.",
+    projects_intro: "Ideas turned into real applications.",
+    contact_intro: "The next great collaboration starts here.",
     // ---- NAVIGATION ----
     nav_about: "About",
     nav_skills: "Skills",
     nav_experience: "Experience",
+    nav_formation: "Education",
     nav_projects: "Projects",
     nav_testimonials: "Reviews",
-    nav_cases: "Case Studies",
-    nav_blog: "Blog",
     nav_contact: "Contact",
     nav_whatsapp: "WhatsApp",
 
@@ -151,14 +157,16 @@ const TRANSLATIONS = {
 
     // ---- EXPERIENCE ----
     exp_label: "Experience",
-    exp_title: "My journey",
+    exp_title: "My experience",
+    formation_label: "Education",
+    formation_title: "My education",
+    formation_intro: "The technical foundations behind my work.",
 
     // ---- PROJECTS ----
     projects_label: "Projects",
     projects_title: "Recent work",
     projects_github: "View on GitHub",
     projects_all: "View all my projects on GitHub",
-    projects_case_study: "View case study",
 
     // ---- TESTIMONIALS ----
     testimonials_label: "Testimonials",
@@ -186,41 +194,35 @@ const TRANSLATIONS = {
     contact_form_success: "✅ Thanks! I'll get back to you soon.",
 
     // ---- FOOTER ----
-    footer_text: "Made with ❤️ in Casablanca.",
+    footer_text: "Based in Casablanca.",
 
     // ---- CASE STUDIES ----
-    case_toc: "Table of contents",
-    case_context: "The context",
-    case_challenge: "The challenge",
-    case_solution: "My solution",
-    case_results: "The results",
-    case_lessons: "What I learned",
-    case_demo: "View demo",
-    case_code: "View code",
-    case_role: "Role",
-    case_duration: "Duration",
-    case_back: "Back to portfolio",
 
     // ---- BLOG ----
-    blog_title: "Tech articles",
-    blog_subtitle: "Feedback, tips and thoughts on web development.",
-    blog_read: "Read article",
-    blog_back: "Back to portfolio",
-    blog_empty: "No articles yet."
   },
 
   // ============================================
   // العربية (ARABE)
   // ============================================
   ar: {
+    nav_cta: "لنتحدث",
+    hero_note_title: "تصميم بعناية. وبرمجة بشغف.",
+    hero_note_subtitle: "من الواجهة إلى قاعدة البيانات.",
+    scroll_explore: "اكتشف",
+    tools_label: "أدواتي اليومية",
+    about_intro: "عقل فضولي. وشغف ببناء التجارب.",
+    skills_intro: "الأدوات المناسبة لتحويل كل فكرة إلى واقع.",
+    skill_level: "الإتقان",
+    exp_intro: "مسار يتطور، خطوة تلو الأخرى.",
+    projects_intro: "أفكار أصبحت تطبيقات حقيقية.",
+    contact_intro: "التعاون القادم يبدأ من هنا.",
     // ---- NAVIGATION ----
     nav_about: "نبذة عني",
     nav_skills: "المهارات",
-    nav_experience: "المسار",
+    nav_experience: "الخبرة",
+    nav_formation: "التكوين",
     nav_projects: "المشاريع",
     nav_testimonials: "التوصيات",
-    nav_cases: "دراسات الحالة",
-    nav_blog: "المدونة",
     nav_contact: "اتصل بي",
     nav_whatsapp: "واتساب",
 
@@ -252,15 +254,17 @@ const TRANSLATIONS = {
     skills_title: "التقنيات التي أستخدمها",
 
     // ---- EXPERIENCE ----
-    exp_label: "المسار",
+    exp_label: "الخبرة",
     exp_title: "خبرتي",
+    formation_label: "التكوين",
+    formation_title: "تكويني الأكاديمي",
+    formation_intro: "الأسس التقنية التي تدعم ممارستي المهنية.",
 
     // ---- PROJECTS ----
     projects_label: "المشاريع",
     projects_title: "أعمال حديثة",
     projects_github: "شاهد على GitHub",
     projects_all: "شاهد جميع مشاريعي على GitHub",
-    projects_case_study: "شاهد دراسة الحالة",
 
     // ---- TESTIMONIALS ----
     testimonials_label: "التوصيات",
@@ -288,26 +292,10 @@ const TRANSLATIONS = {
     contact_form_success: "✅ شكرا! سأرد عليك قريبا.",
 
     // ---- FOOTER ----
-    footer_text: "صنع بـ ❤️ في الدار البيضاء.",
+    footer_text: "مقيم في الدار البيضاء.",
 
     // ---- CASE STUDIES ----
-    case_toc: "جدول المحتويات",
-    case_context: "السياق",
-    case_challenge: "التحدي",
-    case_solution: "حلي",
-    case_results: "النتائج",
-    case_lessons: "ما تعلمته",
-    case_demo: "شاهد العرض",
-    case_code: "شاهد الكود",
-    case_role: "الدور",
-    case_duration: "المدة",
-    case_back: "العودة إلى المحفظة",
 
     // ---- BLOG ----
-    blog_title: "مقالات تقنية",
-    blog_subtitle: "تجارب ونصائح وأفكار حول تطوير الويب.",
-    blog_read: "اقرأ المقال",
-    blog_back: "العودة إلى المحفظة",
-    blog_empty: "لا توجد مقالات حاليا."
   }
 };

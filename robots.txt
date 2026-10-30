@@ -6,6 +6,7 @@ Allow: /
 
 # Interdit l'indexation de la page admin
 Disallow: /admin.html
+Disallow: /404.html
 
 # Sitemap
 Sitemap: https://oussama-khiati.com/sitemap.xml

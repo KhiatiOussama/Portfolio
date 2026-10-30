@@ -12,9 +12,9 @@ module.exports = {
         display: ['Space Grotesk', 'sans-serif'],
       },
       colors: {
-        accent: { DEFAULT: '#8b5cf6', light: '#a78bfa', dark: '#7c3aed' },
-        cyan: '#06b6d4',
-        whatsapp: '#25d366',
+        accent: { DEFAULT: '#9EC8B9', light: '#9EC8B9', dark: '#5C8374' },
+        cyan: '#5C8374',
+        whatsapp: '#5C8374',
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',

@@ -14,14 +14,18 @@ function saveState() {
     alert('⚠️ Espace localStorage dépassé. Exporte et nettoie tes images.');
   }
 }
-function loadState() {
-  const saved = localStorage.getItem('portfolioConfig');
-  if (saved) {
-    try { state = JSON.parse(saved); } catch (e) {}
-  }
+function showStatus(message, error = false) {
+  const status = $('admin-status');
+  if (!status) return;
+  status.textContent = message;
+  status.classList.remove('hidden', 'border-red-500/30', 'text-red-200');
+  if (error) status.classList.add('border-red-500/30', 'text-red-200');
+  clearTimeout(showStatus.timer);
+  showStatus.timer = setTimeout(() => status.classList.add('hidden'), 2200);
 }
+function loadState() { state = Portfolio.preview(CONFIG); }
 function escapeHtml(str) {
-  if (typeof str !== 'string') return str ?? '';
+  str = String(str ?? "");
   return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 function createCard(html) {
@@ -37,7 +41,7 @@ function updateSizeWarning() {
   if (w) w.classList.toggle('hidden', size < 500);
 }
 function handleImageUpload(file, cb, maxKB = 500) {
-  if (!file.type.startsWith('image/')) { alert('❌ Ce n\'est pas une image'); return; }
+  if (!['image/png','image/jpeg','image/webp','image/gif'].includes(file.type)) { alert('❌ Ce n\'est pas une image'); return; }
   if (file.size > maxKB * 1024) { alert(`⚠️ Image trop lourde (${Math.round(file.size/1024)} Ko). Max ${maxKB} Ko.`); return; }
   const reader = new FileReader();
   reader.onload = (e) => cb(e.target.result);
@@ -79,39 +83,63 @@ function removeStat(i) { state.stats.splice(i,1); saveState(); renderStats(); }
 function renderCompetences() {
   const c = $('competences-container');
   c.innerHTML = '';
+  const iconOptions = [
+    ['code', 'Code'],
+    ['layers', 'Framework'],
+    ['database', 'Données'],
+    ['grid', 'Conception'],
+    ['tools', 'Outils'],
+    ['globe', 'Langues'],
+  ];
   state.competences.forEach((cat, i) => {
+    const selectedIcon = iconOptions.some(([key]) => key === cat.icone)
+      ? cat.icone
+      : iconOptions[i % iconOptions.length][0];
+    if (!iconOptions.some(([key]) => key === cat.icone)) cat.icone = selectedIcon;
+    const iconPicker = iconOptions.map(([key, label]) => `
+      <button type="button" title="${label}" aria-label="Icône ${label}"
+        class="icon-choice w-10 h-10 rounded-lg flex items-center justify-center border ${selectedIcon === key ? 'border-purple-400 bg-purple-500/20 text-purple-300' : 'border-white/10 text-slate-400 hover:text-white hover:bg-white/10'}"
+        onclick="setCompetenceIcon(${i}, '${key}')">
+        ${Portfolio.icon(key)}
+      </button>`).join('');
     c.appendChild(createCard(`
-      <div class="grid grid-cols-[60px_1fr_80px] gap-2 mb-2">
-        <input class="input-base text-center" value="${escapeHtml(cat.icone)}" onchange="state.competences[${i}].icone = this.value; saveState();">
+      <div class="grid md:grid-cols-[270px_1fr_80px] gap-3 mb-2 items-center">
+        <div class="flex flex-wrap gap-1.5" role="group" aria-label="Choisir une icône">
+          ${iconPicker}
+        </div>
         <input class="input-base" value="${escapeHtml(cat.titre)}" onchange="state.competences[${i}].titre = this.value; saveState();">
-        <input class="input-base text-center" type="number" value="${cat.niveau||80}" onchange="state.competences[${i}].niveau = parseInt(this.value); saveState();">
+        <input class="input-base text-center" type="number" value="${escapeHtml(String(cat.niveau || 80))}" onchange="state.competences[${i}].niveau = parseInt(this.value); saveState();">
       </div>
-      <textarea class="input-base" rows="2" onchange="state.competences[${i}].items = this.value.split('\\n').map(s=>s.trim()).filter(Boolean); saveState();">${cat.items.join('\n')}</textarea>
+      <textarea class="input-base" rows="2" onchange="state.competences[${i}].items = this.value.split('\\n').map(s=>s.trim()).filter(Boolean); saveState();">${escapeHtml(cat.items.join('\n'))}</textarea>
       <button onclick="removeCompetence(${i})" class="mt-2 text-red-400 text-sm">🗑️ Supprimer</button>
     `));
   });
 }
-function addCompetence() { state.competences.push({ icone:'🛠️', titre:'Nouvelle catégorie', niveau:80, items:[] }); saveState(); renderCompetences(); }
+function setCompetenceIcon(index, icon) { state.competences[index].icone = icon; saveState(); renderCompetences(); }
+function addCompetence() { state.competences.push({ icone:'tools', titre:'Nouvelle catégorie', niveau:80, items:[] }); saveState(); renderCompetences(); }
 function removeCompetence(i) { state.competences.splice(i,1); saveState(); renderCompetences(); }
 
-function renderExperiences() {
-  const c = $('experiences-container');
+function renderJourneyEntries(key) {
+  const c = $(`${key}-container`);
   c.innerHTML = '';
-  state.experiences.forEach((exp, i) => {
+  state[key].forEach((exp, i) => {
     c.appendChild(createCard(`
       <div class="grid md:grid-cols-2 gap-2 mb-2">
-        <input class="input-base" placeholder="2024-08" value="${escapeHtml(exp.date)}" onchange="state.experiences[${i}].date = this.value; saveState();">
-        <input class="input-base" placeholder="Août 2024 — Présent" value="${escapeHtml(exp.dateLabel)}" onchange="state.experiences[${i}].dateLabel = this.value; saveState();">
+        <input class="input-base" placeholder="2024-08" value="${escapeHtml(exp.date)}" onchange="state.${key}[${i}].date = this.value; saveState();">
+        <input class="input-base" placeholder="Août 2024 — Présent" value="${escapeHtml(exp.dateLabel)}" onchange="state.${key}[${i}].dateLabel = this.value; saveState();">
       </div>
-      <input class="input-base mb-2" value="${escapeHtml(exp.titre)}" onchange="state.experiences[${i}].titre = this.value; saveState();">
-      <input class="input-base mb-2" value="${escapeHtml(exp.entreprise)}" onchange="state.experiences[${i}].entreprise = this.value; saveState();">
-      <textarea class="input-base" rows="3" onchange="state.experiences[${i}].missions = this.value.split('\\n').map(s=>s.trim()).filter(Boolean); saveState();">${exp.missions.join('\n')}</textarea>
-      <button onclick="removeExperience(${i})" class="mt-2 text-red-400 text-sm">🗑️ Supprimer</button>
+      <input class="input-base mb-2" value="${escapeHtml(exp.titre)}" onchange="state.${key}[${i}].titre = this.value; saveState();">
+      <input class="input-base mb-2" value="${escapeHtml(exp.entreprise)}" onchange="state.${key}[${i}].entreprise = this.value; saveState();">
+      <textarea class="input-base" rows="3" onchange="state.${key}[${i}].missions = this.value.split('\\n').map(s=>s.trim()).filter(Boolean); saveState();">${escapeHtml(exp.missions.join('\n'))}</textarea>
+      <button onclick="removeJourneyEntry('${key}', ${i})" class="mt-2 text-red-400 text-sm">🗑️ Supprimer</button>
     `));
   });
 }
+function renderExperiences() { renderJourneyEntries('experiences'); }
+function renderFormations() { renderJourneyEntries('formations'); }
 function addExperience() { state.experiences.push({ date: new Date().toISOString().slice(0,7), dateLabel: 'Date', titre: 'Nouveau poste', entreprise: '', missions: [] }); saveState(); renderExperiences(); }
-function removeExperience(i) { state.experiences.splice(i,1); saveState(); renderExperiences(); }
+function addFormation() { state.formations.push({ date: new Date().toISOString().slice(0,7), dateLabel: 'Date', titre: 'Nouvelle formation', entreprise: '', missions: [] }); saveState(); renderFormations(); }
+function removeJourneyEntry(key, i) { state[key].splice(i,1); saveState(); renderJourneyEntries(key); }
 
 function renderProjets() {
   const c = $('projets-container');
@@ -119,7 +147,7 @@ function renderProjets() {
   state.projets.forEach((p, i) => {
     const isImg = p.icone && (p.icone.startsWith('data:image') || p.icone.startsWith('http'));
     const preview = isImg
-      ? `<img src="${p.icone}" class="max-h-20 mx-auto mb-2 rounded-lg">`
+      ? `<img src="${escapeHtml(Portfolio.url(p.icone, true))}" class="max-h-20 mx-auto mb-2 rounded-lg">`
       : `<div class="text-3xl text-center mb-2">${escapeHtml(p.icone)}</div>`;
     c.appendChild(createCard(`
       <div class="grid md:grid-cols-2 gap-2 mb-2">
@@ -127,7 +155,7 @@ function renderProjets() {
         <input class="input-base" placeholder="https://github.com/..." value="${escapeHtml(p.lien)}" onchange="state.projets[${i}].lien = this.value; saveState();">
       </div>
       <textarea class="input-base mb-2" rows="2" onchange="state.projets[${i}].description = this.value; saveState();">${escapeHtml(p.description)}</textarea>
-      <input class="input-base mb-2" placeholder="React, Laravel" value="${p.technos.join(', ')}" onchange="state.projets[${i}].technos = this.value.split(',').map(s=>s.trim()).filter(Boolean); saveState();">
+      <input class="input-base mb-2" placeholder="React, Laravel" value="${escapeHtml(p.technos.join(', '))}" onchange="state.projets[${i}].technos = this.value.split(',').map(s=>s.trim()).filter(Boolean); saveState();">
       <div class="mb-2">
         ${preview}
         <div class="drop-zone" data-index="${i}">
@@ -161,12 +189,16 @@ function removeProjet(i) { state.projets.splice(i,1); saveState(); renderProjets
 
 // Tabs
 $$('.tab-btn').forEach(btn => {
+  btn.setAttribute('role', 'tab');
+  btn.setAttribute('aria-selected', btn.classList.contains('active') ? 'true' : 'false');
   btn.addEventListener('click', () => {
     $$('.tab-btn').forEach(b => b.classList.remove('active'));
     $$('.tab-content').forEach(c => c.classList.add('hidden'));
     btn.classList.add('active');
     $('tab-' + btn.dataset.tab).classList.remove('hidden');
+    $$('.tab-btn').forEach(b => b.setAttribute('aria-selected', b === btn ? 'true' : 'false'));
   });
+  btn.setAttribute('tabindex', '0');
 });
 
 // Export
@@ -177,8 +209,10 @@ $('btn-export').addEventListener('click', () => {
   a.href = URL.createObjectURL(blob);
   a.download = 'config.js';
   a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   const btn = $('btn-export');
   btn.textContent = '✅ Téléchargé !';
+  showStatus('Configuration exportée.');
   setTimeout(() => btn.textContent = '📥 Exporter config.js', 2000);
 });
 
@@ -186,12 +220,19 @@ $('btn-save').addEventListener('click', () => {
   saveState();
   const btn = $('btn-save');
   btn.textContent = '✅ Sauvegardé !';
+  showStatus('Modifications sauvegardées localement.');
   setTimeout(() => btn.textContent = '💾 Sauvegarder', 1500);
 });
 
 $('btn-preview').addEventListener('click', () => {
   saveState();
-  window.open('index.html', '_blank');
+  window.open('index.html', '_blank', 'noopener,noreferrer');
+});
+
+$('btn-reset').addEventListener('click', () => {
+  if (!confirm('Réinitialiser les modifications locales et retrouver la configuration du fichier config.js ?')) return;
+  localStorage.removeItem('portfolioConfig');
+  window.location.reload();
 });
 /* ============================================
    TÉMOIGNAGES / AVIS
@@ -348,6 +389,7 @@ initSimpleFields();
 renderStats();
 renderCompetences();
 renderExperiences();
+renderFormations();
 renderProjets();
 renderTemoignages();
 updateSizeWarning();
